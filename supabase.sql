@@ -125,3 +125,22 @@ values
 ('8850987100012','มาม่า รสหมูสับ','อาหาร','🍜',4.5,6,50,10),
 ('8850718801234','เลย์ รสซอลท์','ขนม','🥔',12,20,5,5)
 on conflict(barcode) do nothing;
+
+-- QR payment settings (run this section once for an existing project)
+create table if not exists public.app_settings (
+ id integer primary key default 1 check(id=1), payment_qr_url text,
+ payment_account_name text default '', payment_bank_name text default '',
+ updated_by uuid references auth.users(id), updated_at timestamptz not null default now()
+);
+alter table public.app_settings enable row level security;
+drop policy if exists app_settings_authenticated_all on public.app_settings;
+create policy app_settings_authenticated_all on public.app_settings for all to authenticated using(true) with check(true);
+grant select,insert,update on public.app_settings to authenticated;
+insert into public.app_settings(id) values(1) on conflict(id) do nothing;
+insert into storage.buckets(id,name,public) values('payment-qr','payment-qr',true) on conflict(id) do update set public=true;
+drop policy if exists authenticated_upload_payment_qr on storage.objects;
+create policy authenticated_upload_payment_qr on storage.objects for insert to authenticated with check(bucket_id='payment-qr');
+drop policy if exists authenticated_update_payment_qr on storage.objects;
+create policy authenticated_update_payment_qr on storage.objects for update to authenticated using(bucket_id='payment-qr') with check(bucket_id='payment-qr');
+drop policy if exists authenticated_delete_payment_qr on storage.objects;
+create policy authenticated_delete_payment_qr on storage.objects for delete to authenticated using(bucket_id='payment-qr');
