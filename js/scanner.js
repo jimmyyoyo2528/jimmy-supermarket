@@ -1,0 +1,4 @@
+import {toast} from './config.js';
+let stream=null, timer=null;
+export async function openScanner(onCode){const modal=document.querySelector('#scannerModal'),video=document.querySelector('#scannerVideo');modal?.classList.add('show');try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.srcObject=stream;await video.play();if('BarcodeDetector'in window){const detector=new BarcodeDetector({formats:['ean_13','ean_8','code_128','upc_a','qr_code']});timer=setInterval(async()=>{try{const codes=await detector.detect(video);if(codes[0]){onCode(codes[0].rawValue);closeScanner()}}catch{}},500)}else toast('เบราว์เซอร์นี้ยังไม่รองรับสแกนอัตโนมัติ กรุณากรอกบาร์โค้ด')}catch{toast('เปิดกล้องไม่ได้ กรุณาอนุญาตสิทธิ์กล้อง')}}
+export function closeScanner(){clearInterval(timer);timer=null;stream?.getTracks().forEach(t=>t.stop());stream=null;document.querySelector('#scannerModal')?.classList.remove('show')}
