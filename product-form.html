@@ -76,6 +76,7 @@
 
     <div class="toast" aria-live="polite"></div>
 
+    <script src="https://unpkg.com/@zxing/browser@latest"></script>
     <script type="module">
         import { supabase, toast, bottomNav } from './js/config.js';
         import { requireAuth } from './js/auth.js';
@@ -134,29 +135,43 @@
         }
 
         async function readBarcodeFromFile(file){
+            // 1) Native BarcodeDetector: เร็วบน Chrome/Android ที่รองรับ
             try{
                 const fileDetector=await makeBarcodeDetector();
-                if(!fileDetector) return null;
-                let source=null;
+                if(fileDetector){
+                    let source=null;
+                    try{
+                        source=await createImageBitmap(file);
+                        const codes=await fileDetector.detect(source);
+                        if(codes.length) return String(codes[0].rawValue||'').trim() || null;
+                    } finally {
+                        if(source && typeof source.close==='function') source.close();
+                    }
+                }
+            }catch(err){ console.warn('Native image barcode:',err); }
+
+            // 2) ZXing fallback: ใช้กับ iPhone/iPad/Safari และ browser ที่ไม่มี BarcodeDetector
+            try{
+                if(!window.ZXingBrowser) return null;
+                const reader=new ZXingBrowser.BrowserMultiFormatReader();
+                const url=URL.createObjectURL(file);
                 try{
-                    source=await createImageBitmap(file);
-                    const codes=await fileDetector.detect(source);
-                    return codes.length ? String(codes[0].rawValue||'').trim() : null;
+                    const img=document.createElement('img');
+                    img.src=url;
+                    await new Promise((resolve,reject)=>{ img.onload=resolve; img.onerror=reject; });
+                    const result=await reader.decodeFromImageElement(img);
+                    return result?.getText?.() || result?.text || null;
                 } finally {
-                    if(source && typeof source.close==='function') source.close();
+                    URL.revokeObjectURL(url);
                 }
             }catch(err){
-                console.warn('Read barcode from image:',err);
+                console.warn('ZXing image barcode:',err);
                 return null;
             }
         }
 
         async function autoFillBarcodeFromFiles(files){
             if(barcodeEl.value.trim()) return;
-            if(!('BarcodeDetector' in window)){
-                toast('แนบรูปแล้ว แต่เบราว์เซอร์นี้ยังไม่รองรับการอ่านบาร์โค้ดจากรูปอัตโนมัติ');
-                return;
-            }
             for(const file of files){
                 const value=await readBarcodeFromFile(file);
                 if(value){
@@ -205,24 +220,42 @@
         }
 
         async function startScanner(){
-            if(!('BarcodeDetector' in window)){
-                toast('เบราว์เซอร์นี้ยังไม่รองรับการสแกนบาร์โค้ด กรุณาใช้ Chrome บน Android หรือกรอกเลขด้วยตนเอง');
-                return;
-            }
             try{
-                detector=await makeBarcodeDetector();
-                if(!detector) throw Error('BarcodeDetector not supported');
                 scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
                 scannerVideo.srcObject=scannerStream;
                 await scannerVideo.play();
                 scannerModal.classList.add('open'); scannerModal.setAttribute('aria-hidden','false');
                 scannerRunning=true;
-                scanLoop();
+
+                // Native first
+                detector=await makeBarcodeDetector();
+                if(detector){
+                    scanLoop();
+                    return;
+                }
+
+                // ZXing fallback for iPhone/Safari and other mobile browsers
+                if(!window.ZXingBrowser) throw Error('ไม่พบตัวอ่านบาร์โค้ด');
+                const reader=new ZXingBrowser.BrowserMultiFormatReader();
+                const controls=await reader.decodeFromVideoElement(scannerVideo,(result,error,ctrl)=>{
+                    if(result){
+                        const value=String(result.getText?.() || result.text || '').trim();
+                        if(value){
+                            barcodeEl.value=value;
+                            barcodeEl.dispatchEvent(new Event('input',{bubbles:true}));
+                            if(ctrl?.stop) ctrl.stop();
+                            stopScanner();
+                            toast('อ่านบาร์โค้ดแล้ว: '+value);
+                            barcodeEl.focus();
+                        }
+                    }
+                });
+                window.__barcodeScannerControls=controls;
             }catch(err){
                 stopScanner();
                 if(err?.name==='NotAllowedError') toast('ไม่ได้รับอนุญาตให้ใช้กล้อง กรุณาอนุญาต Camera ในเบราว์เซอร์');
                 else if(err?.name==='NotFoundError') toast('ไม่พบกล้องบนอุปกรณ์');
-                else toast('เปิดกล้องไม่สำเร็จ: '+(err?.message||'Unknown error'));
+                else toast('เปิดเครื่องสแกนไม่สำเร็จ: '+(err?.message||'Unknown error'));
             }
         }
 
@@ -249,6 +282,7 @@
 
         function stopScanner(){
             scannerRunning=false;
+            if(window.__barcodeScannerControls){ try{ window.__barcodeScannerControls.stop(); }catch(e){} window.__barcodeScannerControls=null; }
             if(scanTimer){ clearTimeout(scanTimer); scanTimer=null; }
             if(scannerStream){ scannerStream.getTracks().forEach(track=>track.stop()); scannerStream=null; }
             scannerVideo.srcObject=null;
