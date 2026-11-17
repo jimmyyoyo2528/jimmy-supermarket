@@ -3360,3 +3360,101 @@ a {
     }
 
 }
+/* Jimmy POS - Modern Bottom Navigation */
+#nav {
+    position: fixed;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    max-width: 500px;
+    z-index: 1000;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.bottom-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    padding: 7px 7px max(7px, env(safe-area-inset-bottom));
+    background: rgba(255,255,255,.97);
+    border: 1px solid #e5ebe8;
+    border-radius: 22px;
+    box-shadow: 0 12px 35px rgba(26,48,38,.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.bottom-nav .nav-item {
+    position: relative;
+    min-height: 61px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px;
+    color: #8795a5;
+    background: transparent;
+    border-radius: 16px;
+    text-decoration: none;
+    font-size: 11px;
+    transition: color .18s ease, transform .15s ease;
+}
+
+.bottom-nav .nav-icon {
+    width: 35px;
+    height: 35px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    transition: background .18s ease, transform .18s ease;
+}
+
+.bottom-nav .nav-icon svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.bottom-nav .nav-label {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.bottom-nav .nav-item.active {
+    color: #08a957;
+    background: transparent;
+    font-weight: 700;
+}
+
+.bottom-nav .nav-item.active .nav-icon {
+    background: #e9f8f0;
+    transform: translateY(-1px);
+}
+
+.bottom-nav .nav-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: 1px;
+    width: 17px;
+    height: 3px;
+    border-radius: 999px;
+    background: #08a957;
+}
+
+.bottom-nav .nav-item:active {
+    transform: scale(.94);
+}
+
+.app { padding-bottom: 105px; }
+.pos-page { padding-bottom: 130px; }
+
