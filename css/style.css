@@ -3458,3 +3458,245 @@ a {
 .app { padding-bottom: 105px; }
 .pos-page { padding-bottom: 130px; }
 
+/* =========================================================
+   FIX PAYMENT MODAL SCROLL + BOTTOM NAV OVERLAY
+========================================================= */
+
+/* Modal ต้องอยู่เหนือเมนูล่าง */
+#paymentModal {
+    z-index: 5000;
+
+    align-items: flex-end;
+
+    overflow: hidden;
+
+    padding:
+        14px
+        14px
+        max(14px, env(safe-area-inset-bottom));
+}
+
+
+/* กล่องชำระเงินต้องเลื่อนได้ */
+#paymentModal .payment-sheet {
+    width: 100%;
+    max-width: 520px;
+
+    max-height: calc(
+        100dvh -
+        env(safe-area-inset-top) -
+        env(safe-area-inset-bottom) -
+        28px
+    );
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom:
+        max(
+            26px,
+            env(safe-area-inset-bottom)
+        );
+
+    scroll-padding-bottom: 100px;
+}
+
+
+/* ปุ่มยืนยันให้อยู่เหนือส่วนอื่น */
+#confirmPay {
+    position: sticky;
+    bottom: 0;
+
+    z-index: 10;
+
+    min-height: 56px;
+
+    margin-top: 18px;
+
+    box-shadow:
+        0 -10px 20px
+        rgba(255, 255, 255, 0.95),
+        0 8px 22px
+        rgba(8, 169, 87, 0.22);
+}
+
+
+/* ซ่อนเมนูล่าง เมื่อเปิด Payment หรือ Scanner */
+body:has(#paymentModal.show) #nav,
+body:has(#scannerModal.show) #nav {
+    display: none;
+}
+
+
+/* ป้องกันหน้าด้านหลังเลื่อน */
+body:has(#paymentModal.show),
+body:has(#scannerModal.show) {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   MOBILE PAYMENT
+========================================================= */
+
+@media (max-width: 520px) {
+
+    #paymentModal {
+        padding: 0;
+
+        background:
+            rgba(16, 28, 23, 0.58);
+    }
+
+
+    #paymentModal .payment-sheet {
+        max-width: none;
+
+        max-height: 94dvh;
+
+        border-radius:
+            25px
+            25px
+            0
+            0;
+
+        padding:
+            18px
+            18px
+            max(
+                24px,
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    #confirmPay {
+        bottom:
+            max(
+                0px,
+                env(safe-area-inset-bottom)
+            );
+
+        margin-bottom: 0;
+    }
+
+}
+/* Payment cash options + modal scrolling */
+.cash-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px
+}
+
+.cash-option {
+    min-height: 50px;
+    font-size: 14px;
+    font-weight: 700
+}
+
+.cash-option.active {
+    color: #08a957;
+    border: 2px solid #08a957;
+    background: #eaf8f0
+}
+
+.money-negative {
+    color: #e5484d !important
+}
+
+#paymentModal {
+    z-index: 5000;
+    align-items: flex-end;
+    overflow: hidden
+}
+
+#paymentModal .payment-sheet {
+    width: 100%;
+    max-width: 520px;
+    max-height: 94dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-padding-bottom: 90px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom))
+}
+
+#confirmPay {
+    position: sticky;
+    bottom: 0;
+    z-index: 12;
+    min-height: 56px;
+    margin-top: 18px
+}
+
+body.modal-open {
+    overflow: hidden
+}
+
+body:has(#paymentModal.show) #nav {
+    display: none
+}
+
+@media(min-width:430px) {
+    .cash-shortcuts {
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+}
+
+@media(max-width:520px) {
+    #paymentModal {
+        padding: 0
+    }
+
+    #paymentModal .payment-sheet {
+        max-width: none;
+        border-radius: 25px 25px 0 0
+    }
+}
+/* ===============================
+   PRODUCT AREA - COMPACT SCROLL
+================================ */
+
+#productGrid {
+    max-height: 250px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 2px 4px 8px 2px;
+
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+    scrollbar-color: #b9c5bf transparent;
+}
+
+#productGrid::-webkit-scrollbar {
+    width: 4px;
+}
+
+#productGrid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#productGrid::-webkit-scrollbar-thumb {
+    background: #bbc8c1;
+    border-radius: 999px;
+}
+
+/* มือถือ */
+
+@media (max-width: 520px) {
+
+    #productGrid {
+        max-height: 245px;
+    }
+
+}

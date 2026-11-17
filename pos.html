@@ -4,10 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <meta name="theme-color" content="#08a957">
 
@@ -19,543 +16,435 @@
 
 <body class="pos-body">
 
-<div class="app pos-app">
+    <div class="app pos-app">
 
 
-    <!-- =====================================================
+        <!-- =====================================================
          HEADER
     ====================================================== -->
 
-    <header class="pos-topbar">
+        <header class="pos-topbar">
 
-        <button
-            class="pos-icon-btn"
-            id="menuBtn"
-            type="button"
-            aria-label="เปิดเมนู"
-        >
-            ☰
-        </button>
+            <button class="pos-icon-btn" id="menuBtn" type="button" aria-label="เปิดเมนู">
+                ☰
+            </button>
 
 
-        <div class="pos-title">
+            <div class="pos-title">
 
-            <small>
-                Jimmy SuperMarket
-            </small>
+                <small>
+                    Jimmy SuperMarket
+                </small>
 
-            <h1>
-                ขายสินค้า
-            </h1>
+                <h1>
+                    ขายสินค้า
+                </h1>
 
-        </div>
+            </div>
 
 
-        <a
-            class="pos-icon-btn"
-            href="sales.html"
-            aria-label="รายการขาย"
-        >
-            🧾
-        </a>
+            <a class="pos-icon-btn" href="sales.html" aria-label="รายการขาย">
+                🧾
+            </a>
 
-    </header>
+        </header>
 
 
 
-    <!-- =====================================================
+        <!-- =====================================================
          MAIN
     ====================================================== -->
 
-    <main class="pos-page">
+        <main class="pos-page">
 
 
-        <!-- =================================================
+            <!-- =================================================
              SCANNER
         ================================================== -->
 
-        <button
-            id="scanBtn"
-            class="pos-scan-card"
-            type="button"
-        >
+            <button id="scanBtn" class="pos-scan-card" type="button">
 
-            <div class="pos-scan-icon">
-                ▥
-            </div>
+                <div class="pos-scan-icon">
+                    ▥
+                </div>
 
-            <div class="pos-scan-text">
+                <div class="pos-scan-text">
 
-                <strong>
-                    สแกนบาร์โค้ด
-                </strong>
+                    <strong>
+                        สแกนบาร์โค้ด
+                    </strong>
 
-                <small>
-                    แตะเพื่อเปิดกล้อง
-                </small>
+                    <small>
+                        แตะเพื่อเปิดกล้อง
+                    </small>
 
-            </div>
+                </div>
 
 
-            <span class="pos-scan-arrow">
-                ›
-            </span>
+                <span class="pos-scan-arrow">
+                    ›
+                </span>
 
-        </button>
+            </button>
 
 
 
-        <!-- =================================================
+            <!-- =================================================
              BARCODE INPUT
         ================================================== -->
 
-        <form
-            id="manualForm"
-            class="pos-search"
-        >
+            <form id="manualForm" class="pos-search">
 
-            <span class="pos-search-icon">
-                ⌕
-            </span>
+                <span class="pos-search-icon">
+                    ⌕
+                </span>
 
 
-            <input
-                id="manualCode"
-                type="text"
-                inputmode="numeric"
-                placeholder="ยิงหรือกรอกบาร์โค้ด แล้วกด Enter"
-                autocomplete="off"
-            >
+                <input id="manualCode" type="text" inputmode="numeric" placeholder="ยิงหรือกรอกบาร์โค้ด แล้วกด Enter"
+                    autocomplete="off">
 
-        </form>
+            </form>
 
 
 
-        <!-- =================================================
+            <!-- =================================================
              PRODUCT SEARCH
         ================================================== -->
 
-        <div class="pos-search">
+            <div class="pos-search">
 
-            <span class="pos-search-icon">
-                ⌕
-            </span>
+                <span class="pos-search-icon">
+                    ⌕
+                </span>
 
 
-            <input
-                id="search"
-                type="search"
-                placeholder="ค้นหาสินค้า"
-                autocomplete="off"
-            >
+                <input id="search" type="search" placeholder="ค้นหาสินค้า" autocomplete="off">
 
-        </div>
+            </div>
 
 
 
-        <!-- =================================================
+            <!-- =================================================
              PRODUCTS
         ================================================== -->
 
-        <section class="pos-section">
+            <section class="pos-section">
 
-            <div class="pos-section-title">
+                <div class="pos-section-title">
 
-                <div>
+                    <div>
 
-                    <small>
-                        เลือกสินค้า
-                    </small>
+                        <small>
+                            เลือกสินค้า
+                        </small>
 
-                    <h2>
-                        สินค้า
-                    </h2>
+                        <h2>
+                            สินค้า
+                        </h2>
+
+                    </div>
+
+
+                    <a href="products.html">
+                        ดูทั้งหมด
+                    </a>
 
                 </div>
 
 
-                <a href="products.html">
-                    ดูทั้งหมด
-                </a>
+                <div id="productGrid" class="product-grid"></div>
 
-            </div>
-
-
-            <div
-                id="productGrid"
-                class="product-grid"
-            ></div>
-
-        </section>
+            </section>
 
 
 
-        <!-- =================================================
+            <!-- =================================================
              CART
         ================================================== -->
 
-        <section class="pos-section pos-cart-section">
+            <section class="pos-section pos-cart-section">
 
-            <div class="pos-section-title">
+                <div class="pos-section-title">
 
-                <div>
+                    <div>
 
-                    <small>
-                        รายการปัจจุบัน
-                    </small>
+                        <small>
+                            รายการปัจจุบัน
+                        </small>
 
-                    <h2>
-                        ตะกร้าสินค้า
-                    </h2>
+                        <h2>
+                            ตะกร้าสินค้า
+                        </h2>
+
+                    </div>
+
+
+                    <span class="pos-cart-count">
+
+                        <b id="pieceCount">
+                            0
+                        </b>
+
+                        ชิ้น
+
+                    </span>
 
                 </div>
 
 
-                <span class="pos-cart-count">
+                <div id="cartList" class="list pos-cart-list"></div>
 
-                    <b id="pieceCount">
-                        0
-                    </b>
-
-                    ชิ้น
-
-                </span>
-
-            </div>
-
-
-            <div
-                id="cartList"
-                class="list pos-cart-list"
-            ></div>
-
-        </section>
+            </section>
 
 
 
-        <!-- =================================================
+            <!-- =================================================
              SUMMARY
         ================================================== -->
 
-        <section class="pos-summary">
+            <section class="pos-summary">
 
-            <div class="pos-summary-total">
+                <div class="pos-summary-total">
 
-                <div>
+                    <div>
 
-                    <small>
-                        ยอดสุทธิ
-                    </small>
+                        <small>
+                            ยอดสุทธิ
+                        </small>
 
-                    <strong id="total">
-                        ฿0
-                    </strong>
+                        <strong id="total">
+                            ฿0
+                        </strong>
+
+                    </div>
+
+
+                    <span class="pos-summary-icon">
+                        🛒
+                    </span>
 
                 </div>
 
 
-                <span class="pos-summary-icon">
-                    🛒
-                </span>
+                <button id="checkout" class="pos-checkout-btn" type="button">
 
-            </div>
+                    <span>
+                        ชำระเงิน
+                    </span>
 
+                    <strong>
+                        →
+                    </strong>
 
-            <button
-                id="checkout"
-                class="pos-checkout-btn"
-                type="button"
-            >
+                </button>
 
-                <span>
-                    ชำระเงิน
-                </span>
-
-                <strong>
-                    →
-                </strong>
-
-            </button>
-
-        </section>
+            </section>
 
 
-    </main>
+        </main>
 
 
 
-    <!-- =====================================================
+        <!-- =====================================================
          SCANNER MODAL
     ====================================================== -->
 
-    <div
-        id="scannerModal"
-        class="modal"
-    >
+        <div id="scannerModal" class="modal">
 
-        <div class="sheet">
+            <div class="sheet">
 
-            <div class="section-title">
+                <div class="section-title">
 
-                <h2>
-                    สแกน QR / บาร์โค้ด
-                </h2>
+                    <h2>
+                        สแกน QR / บาร์โค้ด
+                    </h2>
 
 
-                <button
-                    id="closeScanner"
-                    class="icon-btn"
-                    type="button"
-                >
-                    ×
-                </button>
+                    <button id="closeScanner" class="icon-btn" type="button">
+                        ×
+                    </button>
 
-            </div>
+                </div>
 
 
-            <div class="scanner-box">
+                <div class="scanner-box">
 
-                <video
-                    id="scannerVideo"
-                    playsinline
-                ></video>
+                    <video id="scannerVideo" playsinline></video>
 
-                <div class="scan-frame"></div>
+                    <div class="scan-frame"></div>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
 
 
-
-    <!-- =====================================================
+        <!-- =====================================================
          PAYMENT MODAL
     ====================================================== -->
 
-    <div
-        id="paymentModal"
-        class="modal"
-    >
+        <div id="paymentModal" class="modal">
 
-        <div class="sheet payment-sheet">
+            <div class="sheet payment-sheet">
 
 
-            <!-- HEADER -->
+                <!-- HEADER -->
 
-            <div class="section-title">
+                <div class="section-title">
 
-                <h2>
-                    ชำระเงิน
-                </h2>
+                    <h2>
+                        ชำระเงิน
+                    </h2>
 
 
-                <button
-                    id="closePayment"
-                    class="icon-btn"
-                    type="button"
-                >
-                    ×
-                </button>
+                    <button id="closePayment" class="icon-btn" type="button">
+                        ×
+                    </button>
 
-            </div>
+                </div>
 
 
 
-            <!-- TOTAL -->
+                <!-- TOTAL -->
 
-            <div class="payment-total">
+                <div class="payment-total">
 
-                <span class="muted">
-                    ยอดสุทธิ
-                </span>
-
-                <h1 id="payTotal"></h1>
-
-            </div>
-
-
-
-            <!-- PAYMENT METHOD -->
-
-            <div class="payment-methods">
-
-                <label class="payment-method">
-
-                    <input
-                        type="radio"
-                        name="pay"
-                        value="cash"
-                        checked
-                    >
-
-                    <span class="payment-method-icon">
-                        💵
+                    <span class="muted">
+                        ยอดสุทธิ
                     </span>
 
-                    <strong>
-                        เงินสด
-                    </strong>
+                    <h1 id="payTotal"></h1>
 
-                </label>
+                </div>
 
 
 
-                <label class="payment-method">
+                <!-- PAYMENT METHOD -->
 
-                    <input
-                        type="radio"
-                        name="pay"
-                        value="transfer"
-                    >
+                <div class="payment-methods">
 
-                    <span class="payment-method-icon">
-                        ▦
-                    </span>
+                    <label class="payment-method">
 
-                    <strong>
-                        โอน / QR
-                    </strong>
+                        <input type="radio" name="pay" value="cash" checked>
 
-                </label>
+                        <span class="payment-method-icon">
+                            💵
+                        </span>
 
-            </div>
+                        <strong>
+                            เงินสด
+                        </strong>
 
-
-
-            <!-- CASH -->
-
-            <div id="cashPanel">
-
-                <div class="field payment-field">
-
-                    <label>
-                        รับเงิน
                     </label>
 
 
-                    <input
-                        id="received"
-                        type="number"
-                        min="0"
-                        value="100"
-                        inputmode="decimal"
-                    >
+
+                    <label class="payment-method">
+
+                        <input type="radio" name="pay" value="transfer">
+
+                        <span class="payment-method-icon">
+                            ▦
+                        </span>
+
+                        <strong>
+                            โอน / QR
+                        </strong>
+
+                    </label>
 
                 </div>
 
 
 
-                <div class="cash-shortcuts">
+                <!-- CASH -->
 
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-cash="100"
-                    >
-                        ฿100
-                    </button>
+                <!-- CASH -->
+
+                <div id="cashPanel">
+
+                    <div class="field payment-field">
+
+                        <label>
+                            รับเงิน
+                        </label>
+
+                        <input id="received" type="number" min="0" inputmode="decimal" placeholder="0">
+
+                    </div>
 
 
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-cash="500"
-                    >
-                        ฿500
-                    </button>
+                    <!-- ระบบสร้างจำนวนเงินให้อัตโนมัติ -->
+                    <div id="cashShortcuts" class="cash-shortcuts"></div>
+
+
+                    <div class="payment-change">
+
+                        <span>
+                            เงินทอน
+                        </span>
+
+                        <strong id="change" class="money-positive"></strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QR -->
+
+                <div id="qrPanel" hidden class="payment-qr-panel">
+
+                    <div id="paymentQr" class="payment-qr">
+                        ยังไม่ได้ตั้งค่า QR
+                    </div>
+
+
+                    <b id="qrAccount"></b>
+
+
+                    <span id="qrBank" class="muted"></span>
+
+
+                    <p class="muted">
+                        ให้ลูกค้าสแกนและตรวจสอบยอดก่อนยืนยัน
+                    </p>
 
                 </div>
 
 
 
-                <div class="payment-change">
+                <!-- CONFIRM -->
 
-                    <span>
-                        เงินทอน
-                    </span>
+                <button id="confirmPay" class="btn btn-primary btn-block pos-confirm-payment" type="button">
+                    ยืนยันการชำระเงิน
+                </button>
 
-
-                    <strong
-                        id="change"
-                        class="money-positive"
-                    ></strong>
-
-                </div>
 
             </div>
-
-
-
-            <!-- QR -->
-
-            <div
-                id="qrPanel"
-                hidden
-                class="payment-qr-panel"
-            >
-
-                <div
-                    id="paymentQr"
-                    class="payment-qr"
-                >
-                    ยังไม่ได้ตั้งค่า QR
-                </div>
-
-
-                <b id="qrAccount"></b>
-
-
-                <span
-                    id="qrBank"
-                    class="muted"
-                ></span>
-
-
-                <p class="muted">
-                    ให้ลูกค้าสแกนและตรวจสอบยอดก่อนยืนยัน
-                </p>
-
-            </div>
-
-
-
-            <!-- CONFIRM -->
-
-            <button
-                id="confirmPay"
-                class="btn btn-primary btn-block pos-confirm-payment"
-                type="button"
-            >
-                ยืนยันการชำระเงิน
-            </button>
-
 
         </div>
+
+
+
+        <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+        <div id="nav"></div>
+
 
     </div>
 
 
 
-    <!-- =====================================================
-         NAVIGATION
-    ====================================================== -->
-
-    <div id="nav"></div>
+    <div class="toast"></div>
 
 
-</div>
-
-
-
-<div class="toast"></div>
-
-
-<script
-    type="module"
-    src="js/pos.js"
-></script>
+    <script type="module" src="js/pos.js"></script>
 
 
 </body>
