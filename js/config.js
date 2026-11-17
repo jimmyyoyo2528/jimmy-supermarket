@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-export const SUPABASE_URL='https://mboghhwvlgegsibsclwl.supabase.co';
-export const SUPABASE_PUBLISHABLE_KEY='sb_publishable_wLuPZ9ygGxNs8LuWg9zhlg_bAE8wNud';
+export const SUPABASE_URL='https://easmruesazdgbaorqaok.supabase.co';
+export const SUPABASE_PUBLISHABLE_KEY='sb_publishable_iK4_1nnvAzDBrW_o7MtAoQ_8FWlq_iN';
 export const configured=!SUPABASE_URL.includes('YOUR_PROJECT')&&!SUPABASE_PUBLISHABLE_KEY.includes('YOUR_');
 export const supabase=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 export const money=n=>new Intl.NumberFormat('th-TH',{style:'currency',currency:'THB',minimumFractionDigits:0}).format(Number(n)||0);
