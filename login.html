@@ -3,34 +3,557 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <meta name="theme-color" content="#08a957">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    >
+
+    <meta name="theme-color" content="#08A957">
+
     <title>เข้าสู่ระบบ | ร้านของฉัน</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
-    <div class="app">
+<body class="login-body">
+
+    <div class="login-page">
+
+        <!-- Background -->
+        <div class="login-bg login-bg-left"></div>
+        <div class="login-bg login-bg-right"></div>
+
+
         <main class="login-wrap">
-            <section class="login-card card">
-                <div class="brand">
-                    <div class="logo">🏪</div>
-                    <h1>ร้านของฉัน</h1>
-                    <p>Jimmy SuperMarket Shop</p>
+
+            <section class="login-card">
+
+                <!-- =======================
+                     BRAND
+                ======================== -->
+
+                <div class="login-brand">
+
+                    <div class="login-logo">
+
+                        <span class="shop-icon">🏪</span>
+
+                        <span class="shop-badge">
+                            24
+                        </span>
+
+                    </div>
+
+
+                    <h1>
+                        ร้านของฉัน
+                    </h1>
+
+
+                    <p class="shop-name">
+                        Jimmy SuperMarket Shop
+                    </p>
+
+
+                    <p class="login-subtitle">
+                        เข้าสู่ระบบเพื่อเริ่มขายสินค้า
+                    </p>
+
+
+                    <div class="login-green-line"></div>
+
                 </div>
+
+
+
+                <!-- =======================
+                     LOGIN FORM
+                ======================== -->
+
                 <form id="loginForm">
-                    <div class="field"><label>อีเมล</label><input id="email" type="email" value="jimmyyoyo2528@gmail.com"
-                            autocomplete="username"></div>
-                    <div class="field"><label>รหัสผ่าน</label><input id="password" type="password" value="jimmy@"
-                            autocomplete="current-password"></div><button
-                        class="btn btn-primary btn-block">เข้าสู่ระบบ</button>
-                </form>ß
+
+
+                    <!-- EMAIL -->
+
+                    <div class="login-field">
+
+                        <label for="email">
+
+                            <span class="label-icon">
+                                ✉
+                            </span>
+
+                            อีเมล
+
+                        </label>
+
+
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="example@email.com"
+                            autocomplete="username"
+                            inputmode="email"
+                            required
+                            value="jimmyyoyo2528@gmail.com"
+                        >
+
+                    </div>
+
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="login-field">
+
+                        <label for="password">
+
+                            <span class="label-icon">
+                                🔒
+                            </span>
+
+                            รหัสผ่าน
+
+                        </label>
+
+
+                        <div class="password-wrapper">
+
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                placeholder="กรอกรหัสผ่าน"
+                                autocomplete="current-password"
+                                value="jimmy@"
+                                required
+                            >
+
+
+                            <button
+                                id="togglePassword"
+                                class="password-toggle"
+                                type="button"
+                                aria-label="แสดงรหัสผ่าน"
+                            >
+
+                                👁
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- OPTIONS -->
+
+                    <div class="login-options">
+
+                        <label class="remember-me">
+
+                            <input
+                                id="rememberMe"
+                                type="checkbox"
+                                checked
+                            >
+
+                            <span>
+                                จดจำฉันไว้ในอุปกรณ์นี้
+                            </span>
+
+                        </label>
+
+
+                        <button
+                            type="button"
+                            id="forgotPassword"
+                            class="forgot-password"
+                        >
+
+                            ลืมรหัสผ่าน?
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- LOGIN BUTTON -->
+
+                    <button
+                        id="loginButton"
+                        class="login-button"
+                        type="submit"
+                    >
+
+                        <span
+                            id="loginSpinner"
+                            class="login-spinner"
+                            aria-hidden="true"
+                        ></span>
+
+                        <span
+                            id="loginButtonIcon"
+                            class="login-button-icon"
+                        >
+                            ↪
+                        </span>
+
+                        <span id="loginButtonText">
+                            เข้าสู่ระบบ
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- MESSAGE -->
+
+                    <div
+                        id="loginMessage"
+                        class="login-message"
+                        aria-live="polite"
+                    ></div>
+
+                </form>
+
+
+
+                <!-- =======================
+                     DIVIDER
+                ======================== -->
+
+                <div class="login-divider">
+
+                    <span></span>
+
+                    <p>
+                        หรือ
+                    </p>
+
+                    <span></span>
+
+                </div>
+
+
+
+                <!-- =======================
+                     INFO
+                ======================== -->
+
+                <div class="login-info">
+
+                    <div class="login-info-icon">
+                        🏪
+                    </div>
+
+
+                    <div class="login-info-content">
+
+                        <strong>
+                            ระบบจัดการร้านค้า ครบ จบ ในที่เดียว
+                        </strong>
+
+                        <p>
+                            ขายง่าย • สต๊อกชัด • รายงานครบ
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =======================
+                     FOOTER
+                ======================== -->
+
+                <div class="login-footer">
+
+                    Jimmy POS
+
+                    <span>•</span>
+
+                    Version 1.0
+
+                </div>
+
             </section>
+
         </main>
+
     </div>
-    <div class="toast" aria-live="polite"></div>
-    <script
-        type="module">import { login } from './js/auth.js'; document.querySelector('#loginForm').onsubmit = e => { e.preventDefault(); login(email.value, password.value) }</script>
+
+
+
+    <!-- TOAST -->
+
+    <div
+        id="toast"
+        class="toast"
+        aria-live="polite"
+    ></div>
+
+
+
+    <!-- ===============================
+         LOGIN SCRIPT
+    ================================ -->
+
+    <script type="module">
+
+        import { login } from './js/auth.js';
+
+
+        const form =
+            document.querySelector('#loginForm');
+
+        const email =
+            document.querySelector('#email');
+
+        const password =
+            document.querySelector('#password');
+
+        const togglePassword =
+            document.querySelector('#togglePassword');
+
+        const loginButton =
+            document.querySelector('#loginButton');
+
+        const loginButtonText =
+            document.querySelector('#loginButtonText');
+
+        const loginButtonIcon =
+            document.querySelector('#loginButtonIcon');
+
+        const loginSpinner =
+            document.querySelector('#loginSpinner');
+
+        const loginMessage =
+            document.querySelector('#loginMessage');
+
+        const forgotPassword =
+            document.querySelector('#forgotPassword');
+
+
+        /* =========================
+           SHOW / HIDE PASSWORD
+        ========================= */
+
+        togglePassword.addEventListener('click', () => {
+
+            const passwordIsHidden =
+                password.type === 'password';
+
+
+            password.type =
+                passwordIsHidden
+                    ? 'text'
+                    : 'password';
+
+
+            togglePassword.textContent =
+                passwordIsHidden
+                    ? '🙈'
+                    : '👁';
+
+
+            togglePassword.setAttribute(
+                'aria-label',
+                passwordIsHidden
+                    ? 'ซ่อนรหัสผ่าน'
+                    : 'แสดงรหัสผ่าน'
+            );
+
+        });
+
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        form.addEventListener('submit', async (event) => {
+
+            event.preventDefault();
+
+
+            loginMessage.textContent = '';
+            loginMessage.className = 'login-message';
+
+
+            const emailValue =
+                email.value.trim();
+
+            const passwordValue =
+                password.value;
+
+
+            if (!emailValue || !passwordValue) {
+
+                showError(
+                    'กรุณากรอกอีเมลและรหัสผ่าน'
+                );
+
+                return;
+            }
+
+
+            setLoading(true);
+
+
+            try {
+
+                await login(
+                    emailValue,
+                    passwordValue
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    'Login Error:',
+                    error
+                );
+
+
+                showError(
+                    getLoginErrorMessage(error)
+                );
+
+            }
+
+            finally {
+
+                setLoading(false);
+
+            }
+
+        });
+
+
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        function setLoading(isLoading) {
+
+            loginButton.disabled =
+                isLoading;
+
+
+            if (isLoading) {
+
+                loginSpinner.classList.add(
+                    'show'
+                );
+
+                loginButtonIcon.style.display =
+                    'none';
+
+                loginButtonText.textContent =
+                    'กำลังเข้าสู่ระบบ...';
+
+            }
+
+            else {
+
+                loginSpinner.classList.remove(
+                    'show'
+                );
+
+                loginButtonIcon.style.display =
+                    '';
+
+                loginButtonText.textContent =
+                    'เข้าสู่ระบบ';
+
+            }
+
+        }
+
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        function showError(text) {
+
+            loginMessage.textContent =
+                text;
+
+            loginMessage.classList.add(
+                'error'
+            );
+
+        }
+
+
+
+        function getLoginErrorMessage(error) {
+
+            const message =
+                String(
+                    error?.message || ''
+                ).toLowerCase();
+
+
+            if (
+                message.includes(
+                    'invalid login credentials'
+                )
+            ) {
+
+                return 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+
+            }
+
+
+            if (
+                message.includes('email not confirmed')
+            ) {
+
+                return 'กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ';
+
+            }
+
+
+            return (
+                error?.message ||
+                'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่'
+            );
+
+        }
+
+
+
+        /* =========================
+           FORGOT PASSWORD
+        ========================= */
+
+        forgotPassword.addEventListener(
+            'click',
+            () => {
+
+                loginMessage.textContent =
+                    'กรุณาติดต่อผู้ดูแลระบบเพื่อรีเซ็ตรหัสผ่าน';
+
+                loginMessage.className =
+                    'login-message info';
+
+            }
+        );
+
+    </script>
+
 </body>
 
 </html>
