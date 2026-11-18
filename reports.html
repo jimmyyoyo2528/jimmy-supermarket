@@ -1,1 +1,119 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#08a957"><title>รายงาน | ร้านของฉัน</title><link rel="stylesheet" href="css/style.css"></head><body><div class="app"><header class="topbar"><span></span><h1>รายงาน</h1><a class="icon-btn" href="sales.html" style="display:grid;place-items:center">🧾</a></header><main class="page"><div class="stats"><div class="stat green card"><small>ยอดขายวันนี้</small><b id="revenue"></b></div><div class="stat blue card"><small>จำนวนบิล</small><b id="bills"></b></div><div class="stat orange card"><small>กำไรโดยประมาณ</small><b id="profit"></b></div><div class="stat purple card"><small>สินค้าใกล้หมด</small><b id="low"></b></div></div><div class="section-title"><h2>ยอดขายตามช่วงเวลา</h2></div><div id="chart" class="chart card"></div><div class="section-title"><h2>ทางลัด</h2></div><div class="two-col"><a class="btn btn-secondary" href="sales.html">ประวัติการขาย</a><a class="btn btn-secondary" href="products.html">ตรวจสต๊อก</a></div></main><div id="nav"></div></div><div class="toast" aria-live="polite"></div><script type="module" src="js/reports.js"></script></body></html>
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#08a957">
+  <title>รายงาน | ร้านของฉัน</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="app reports-page">
+
+    <header class="topbar reports-topbar">
+      <div class="topbar-spacer"></div>
+
+      <div class="topbar-title">
+        <h1>รายงาน</h1>
+        <small>ภาพรวมร้านค้าของคุณ</small>
+      </div>
+    </header>
+
+    <main class="page">
+
+      <!-- Summary -->
+      <section class="stats">
+        <div class="stat green card">
+          <div class="stat-icon">฿</div>
+          <div class="stat-content">
+            <small>ยอดขายวันนี้</small>
+            <b id="revenue">฿0</b>
+          </div>
+        </div>
+
+        <div class="stat blue card">
+          <div class="stat-icon">🧾</div>
+          <div class="stat-content">
+            <small>จำนวนบิล</small>
+            <b id="bills">0</b>
+          </div>
+        </div>
+
+        <div class="stat orange card">
+          <div class="stat-icon">↗</div>
+          <div class="stat-content">
+            <small>กำไรโดยประมาณ</small>
+            <b id="profit">฿0</b>
+          </div>
+        </div>
+
+        <div class="stat purple card">
+          <div class="stat-icon">!</div>
+          <div class="stat-content">
+            <small>สินค้าใกล้หมด</small>
+            <b id="low">0</b>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chart -->
+      <section class="report-section">
+        <div class="section-title">
+          <div>
+            <h2>ยอดขายตามช่วงเวลา</h2>
+            <p>สรุปยอดขายของร้าน</p>
+          </div>
+
+          <span class="section-badge">วันนี้</span>
+        </div>
+
+        <div id="chart" class="chart card"></div>
+      </section>
+
+      <!-- Shortcuts -->
+      <section class="report-section">
+        <div class="section-title">
+          <div>
+            <h2>ทางลัด</h2>
+            <p>เข้าถึงเมนูที่ใช้บ่อย</p>
+          </div>
+        </div>
+
+        <div class="report-shortcuts">
+          <a class="shortcut-card" href="sales.html">
+            <span class="shortcut-icon green-bg">🧾</span>
+
+            <span class="shortcut-text">
+              <strong>ประวัติการขาย</strong>
+              <small>ดูรายการขายทั้งหมด</small>
+            </span>
+
+            <span class="shortcut-arrow">›</span>
+          </a>
+
+          <a class="shortcut-card" href="products.html">
+            <span class="shortcut-icon blue-bg">📦</span>
+
+            <span class="shortcut-text">
+              <strong>ตรวจสต๊อก</strong>
+              <small>เช็กจำนวนสินค้า</small>
+            </span>
+
+            <span class="shortcut-arrow">›</span>
+          </a>
+        </div>
+      </section>
+
+    </main>
+
+    <div id="nav"></div>
+  </div>
+
+  <div class="toast" aria-live="polite"></div>
+
+  <script type="module" src="js/reports.js"></script>
+</body>
+
+</html>
