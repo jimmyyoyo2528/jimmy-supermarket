@@ -1,49 +1,27 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-export const SUPABASE_URL = 'https://easmruesazdgbaorqaok.supabase.co';
-export const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_iK4_1nnvAzDBrW_o7MtAoQ_8FWlq_iN';
+export const SUPABASE_URL='https://easmruesazdgbaorqaok.supabase.co';
+export const SUPABASE_PUBLISHABLE_KEY='sb_publishable_iK4_1nnvAzDBrW_o7MtAoQ_8FWlq_iN';
+export const configured=!SUPABASE_URL.includes('YOUR_PROJECT')&&!SUPABASE_PUBLISHABLE_KEY.includes('YOUR_');
+export const supabase=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+export const money=n=>new Intl.NumberFormat('th-TH',{style:'currency',currency:'THB',minimumFractionDigits:0}).format(Number(n)||0);
 
-export const configured =
-  !SUPABASE_URL.includes('YOUR_PROJECT') &&
-  !SUPABASE_PUBLISHABLE_KEY.includes('YOUR_');
-
-export const supabase = createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  }
-);
-
-export const money = n =>
-  new Intl.NumberFormat('th-TH', {
-    style: 'currency',
-    currency: 'THB',
-    minimumFractionDigits: 0
-  }).format(Number(n) || 0);
-
-export function toast(text) {
-  let e = document.querySelector('.toast');
-
-  if (!e) {
-    e = document.createElement('div');
-    e.className = 'toast';
+export function toast(text){
+  let e=document.querySelector('.toast');
+  if(!e){
+    e=document.createElement('div');
+    e.className='toast';
     document.body.appendChild(e);
   }
-
-  e.textContent = text;
+  e.textContent=text;
   e.classList.add('show');
-  setTimeout(() => e.classList.remove('show'), 2200);
+  setTimeout(()=>e.classList.remove('show'),2200);
 }
 
-export function bottomNav(active) {
+export function bottomNav(active){
   return `
     <nav class="bottom-nav">
-      <a class="nav-item ${active === 'pos' ? 'active' : ''}" href="pos.html">
+      <a class="nav-item ${active==='pos'?'active':''}" href="pos.html">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M3 10.5 12 3l9 7.5"/>
@@ -54,7 +32,7 @@ export function bottomNav(active) {
         <span class="nav-label">ขาย</span>
       </a>
 
-      <a class="nav-item ${active === 'stock' ? 'active' : ''}" href="products.html">
+      <a class="nav-item ${active==='stock'?'active':''}" href="products.html">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m4 7 8-4 8 4-8 4-8-4Z"/>
@@ -66,7 +44,7 @@ export function bottomNav(active) {
         <span class="nav-label">สต๊อก</span>
       </a>
 
-      <a class="nav-item ${active === 'reports' ? 'active' : ''}" href="reports.html">
+      <a class="nav-item ${active==='reports'?'active':''}" href="reports.html">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M4 20V10"/>
@@ -78,7 +56,7 @@ export function bottomNav(active) {
         <span class="nav-label">รายงาน</span>
       </a>
 
-      <a class="nav-item ${active === 'settings' ? 'active' : ''}" href="settings.html">
+      <a class="nav-item ${active==='settings'?'active':''}" href="settings.html">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="3"/>
@@ -87,16 +65,14 @@ export function bottomNav(active) {
         </span>
         <span class="nav-label">ตั้งค่า</span>
       </a>
-    </nav>
-  `;
+    </nav>`;
 }
 
-export function ensureConfigured() {
-  if (!configured) {
+export function ensureConfigured(){
+  if(!configured){
     alert('กรุณาใส่ SUPABASE_URL และ Publishable/Anon key ใน js/config.js');
-    location.href = 'settings.html';
+    location.href='settings.html';
     return false;
   }
-
   return true;
 }
