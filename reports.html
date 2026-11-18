@@ -1,119 +1,28 @@
 <!doctype html>
 <html lang="th">
-
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="theme-color" content="#08a957">
-  <title>รายงาน | ร้านของฉัน</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#AA432D">
+  <title>รายงาน | Jimmy SuperMarket</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
   <div class="app reports-page">
-
-    <header class="topbar reports-topbar">
-      <div class="topbar-spacer"></div>
-
-      <div class="topbar-title">
-        <h1>รายงาน</h1>
-        <small>ภาพรวมร้านค้าของคุณ</small>
-      </div>
-    </header>
-
+    <header class="topbar"><span></span><div class="topbar-title"><h1>รายงาน</h1><small>ภาพรวมร้านค้าของคุณ</small></div><a class="icon-btn" href="sales.html" aria-label="ประวัติการขาย">⌁</a></header>
     <main class="page">
-
-      <!-- Summary -->
-      <section class="stats">
-        <div class="stat green card">
-          <div class="stat-icon">฿</div>
-          <div class="stat-content">
-            <small>ยอดขายวันนี้</small>
-            <b id="revenue">฿0</b>
-          </div>
-        </div>
-
-        <div class="stat blue card">
-          <div class="stat-icon">🧾</div>
-          <div class="stat-content">
-            <small>จำนวนบิล</small>
-            <b id="bills">0</b>
-          </div>
-        </div>
-
-        <div class="stat orange card">
-          <div class="stat-icon">↗</div>
-          <div class="stat-content">
-            <small>กำไรโดยประมาณ</small>
-            <b id="profit">฿0</b>
-          </div>
-        </div>
-
-        <div class="stat purple card">
-          <div class="stat-icon">!</div>
-          <div class="stat-content">
-            <small>สินค้าใกล้หมด</small>
-            <b id="low">0</b>
-          </div>
-        </div>
+      <section class="stats" aria-label="สรุปยอดวันนี้">
+        <div class="stat green card"><div class="stat-icon">฿</div><small>ยอดขายวันนี้</small><b id="revenue">฿0</b></div>
+        <div class="stat blue card"><div class="stat-icon">▤</div><small>จำนวนบิล</small><b id="bills">0</b></div>
+        <div class="stat orange card"><div class="stat-icon">↗</div><small>กำไรโดยประมาณ</small><b id="profit">฿0</b></div>
+        <div class="stat purple card"><div class="stat-icon">!</div><small>สินค้าใกล้หมด</small><b id="low">0</b></div>
       </section>
-
-      <!-- Chart -->
-      <section class="report-section">
-        <div class="section-title">
-          <div>
-            <h2>ยอดขายตามช่วงเวลา</h2>
-            <p>สรุปยอดขายของร้าน</p>
-          </div>
-
-          <span class="section-badge">วันนี้</span>
-        </div>
-
-        <div id="chart" class="chart card"></div>
-      </section>
-
-      <!-- Shortcuts -->
-      <section class="report-section">
-        <div class="section-title">
-          <div>
-            <h2>ทางลัด</h2>
-            <p>เข้าถึงเมนูที่ใช้บ่อย</p>
-          </div>
-        </div>
-
-        <div class="report-shortcuts">
-          <a class="shortcut-card" href="sales.html">
-            <span class="shortcut-icon green-bg">🧾</span>
-
-            <span class="shortcut-text">
-              <strong>ประวัติการขาย</strong>
-              <small>ดูรายการขายทั้งหมด</small>
-            </span>
-
-            <span class="shortcut-arrow">›</span>
-          </a>
-
-          <a class="shortcut-card" href="products.html">
-            <span class="shortcut-icon blue-bg">📦</span>
-
-            <span class="shortcut-text">
-              <strong>ตรวจสต๊อก</strong>
-              <small>เช็กจำนวนสินค้า</small>
-            </span>
-
-            <span class="shortcut-arrow">›</span>
-          </a>
-        </div>
-      </section>
-
+      <section class="report-section"><div class="section-title"><div><h2>ยอดขายตามช่วงเวลา</h2><p>แบ่งช่วงละ 2 ชั่วโมง</p></div><span class="section-badge">วันนี้</span></div><div id="chart" class="chart card" aria-label="กราฟยอดขายวันนี้"></div></section>
+      <section class="report-section"><div class="section-title"><div><h2>ทางลัด</h2><p>เข้าถึงเมนูที่ใช้บ่อย</p></div></div><div class="report-shortcuts"><a class="shortcut-card" href="sales.html"><span class="shortcut-icon green-bg">🧾</span><span class="shortcut-text"><strong>ประวัติการขาย</strong><small>ดูรายการขายทั้งหมด</small></span><span class="shortcut-arrow">›</span></a><a class="shortcut-card" href="products.html"><span class="shortcut-icon blue-bg">📦</span><span class="shortcut-text"><strong>ตรวจสต๊อก</strong><small>เช็กจำนวนสินค้า</small></span><span class="shortcut-arrow">›</span></a></div></section>
     </main>
-
     <div id="nav"></div>
   </div>
-
   <div class="toast" aria-live="polite"></div>
-
   <script type="module" src="js/reports.js"></script>
 </body>
-
 </html>

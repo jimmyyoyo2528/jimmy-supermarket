@@ -8,6 +8,7 @@ create table if not exists public.products (
   category text default '',
   icon text default '📦',
   image_url text,
+  image_urls text[] not null default '{}'::text[],
   cost numeric(12,2) not null default 0 check (cost >= 0),
   price numeric(12,2) not null default 0 check (price >= 0),
   stock integer not null default 0 check (stock >= 0),
@@ -16,6 +17,8 @@ create table if not exists public.products (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.products add column if not exists image_urls text[] not null default '{}'::text[];
 
 create table if not exists public.sales (
   id uuid primary key default gen_random_uuid(),
@@ -144,3 +147,21 @@ drop policy if exists authenticated_update_payment_qr on storage.objects;
 create policy authenticated_update_payment_qr on storage.objects for update to authenticated using(bucket_id='payment-qr') with check(bucket_id='payment-qr');
 drop policy if exists authenticated_delete_payment_qr on storage.objects;
 create policy authenticated_delete_payment_qr on storage.objects for delete to authenticated using(bucket_id='payment-qr');
+
+
+-- Product image storage used by product-form.html
+insert into storage.buckets(id,name,public)
+values('product-images','product-images',true)
+on conflict(id) do update set public=true;
+
+drop policy if exists authenticated_upload_product_images on storage.objects;
+create policy authenticated_upload_product_images on storage.objects
+for insert to authenticated with check(bucket_id='product-images');
+
+drop policy if exists authenticated_update_product_images on storage.objects;
+create policy authenticated_update_product_images on storage.objects
+for update to authenticated using(bucket_id='product-images') with check(bucket_id='product-images');
+
+drop policy if exists authenticated_delete_product_images on storage.objects;
+create policy authenticated_delete_product_images on storage.objects
+for delete to authenticated using(bucket_id='product-images');

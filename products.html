@@ -1,111 +1,28 @@
 <!doctype html>
 <html lang="th">
-
 <head>
   <meta charset="utf-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <meta name="theme-color" content="#08a957">
-
-  <title>รายการสินค้า | ร้านของฉัน</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#AA432D">
+  <title>รายการสินค้า | Jimmy SuperMarket</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
   <div class="app products-page">
-
-    <!-- Header -->
     <header class="products-header">
-
-      <a class="products-back" href="pos.html" aria-label="กลับ">
-        <span>‹</span>
-      </a>
-
-      <div class="products-header-title">
-        <h1>รายการสินค้า</h1>
-        <p>จัดการสินค้าและสต๊อก</p>
-      </div>
-
-      <a class="stock-btn" href="stock-in.html">
-        รับสินค้า
-      </a>
-
+      <a class="products-back" href="pos.html" aria-label="กลับหน้าขาย">‹</a>
+      <div class="products-header-title"><h1>รายการสินค้า</h1><p>จัดการสินค้าและสต๊อก</p></div>
+      <a class="stock-btn" href="stock-in.html">รับสินค้า</a>
     </header>
-
-
     <main class="page products-content">
-
-      <!-- Search -->
-      <div class="product-search">
-
-        <span class="search-icon">
-          ⌕
-        </span>
-
-        <input
-          id="search"
-          type="search"
-          placeholder="ค้นหาชื่อสินค้า หรือบาร์โค้ด"
-          autocomplete="off"
-        >
-
-      </div>
-
-
-      <!-- Section title -->
-      <div class="products-section-header">
-
-        <div>
-          <h2>สินค้าในร้าน</h2>
-          <p>รายการสินค้าและจำนวนคงเหลือ</p>
-        </div>
-
-        <a href="stock-in.html">
-          + รับสินค้าเข้า
-        </a>
-
-      </div>
-
-
-      <!-- Product list -->
-      <div
-        id="productList"
-        class="list product-list"
-      ></div>
-
+      <div class="product-search"><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" placeholder="ค้นหาชื่อสินค้า หรือบาร์โค้ด" autocomplete="off" aria-label="ค้นหาสินค้า"></div>
+      <div class="products-section-header"><div><h2>สินค้าในร้าน</h2><p>รายการสินค้าและจำนวนคงเหลือ</p></div><a href="stock-in.html">+ รับสินค้าเข้า</a></div>
+      <div id="productList" class="list product-list" aria-live="polite"></div>
     </main>
-
-
-    <!-- Add product -->
-    <a
-      class="product-fab"
-      href="product-form.html"
-      aria-label="เพิ่มสินค้า"
-    >
-      <span>+</span>
-    </a>
-
-
-    <!-- Bottom navigation -->
+    <a class="product-fab" href="product-form.html" aria-label="เพิ่มสินค้า"><span aria-hidden="true">+</span></a>
     <div id="nav"></div>
-
   </div>
-
-
-  <div
-    class="toast"
-    aria-live="polite"
-  ></div>
-
-
-  <script
-    type="module"
-    src="js/products.js"
-  ></script>
-
+  <div class="toast" aria-live="polite"></div>
+  <script type="module" src="js/products.js"></script>
 </body>
-
 </html>

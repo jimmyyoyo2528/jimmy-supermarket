@@ -1,137 +1,98 @@
 import { toast } from './config.js';
 
 let scanner = null;
-let loading = null;
+let libraryPromise = null;
 let scanning = false;
 
 function loadLibrary() {
   if (window.Html5Qrcode) return Promise.resolve();
-  if (loading) return loading;
-
-  loading = new Promise((resolve, reject) => {
+  if (libraryPromise) return libraryPromise;
+  libraryPromise = new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
     script.onload = resolve;
     script.onerror = () => reject(new Error('โหลดตัวสแกนไม่สำเร็จ'));
     document.head.appendChild(script);
   });
-
-  return loading;
+  return libraryPromise;
 }
 
 function ensureReaderHost() {
   const box = document.querySelector('#scannerModal .scanner-box');
-  const oldVideo = document.querySelector('#scannerVideo');
-
-  if (!box) throw new Error('ไม่พบ scanner-box');
-
-  oldVideo?.classList.add('hidden');
-
+  if (!box) throw new Error('ไม่พบพื้นที่แสดงกล้อง');
+  document.querySelector('#scannerVideo')?.classList.add('hidden');
   let host = document.querySelector('#html5QrReader');
   if (!host) {
     host = document.createElement('div');
     host.id = 'html5QrReader';
-    host.style.width = '100%';
-    host.style.height = '100%';
-    host.style.overflow = 'hidden';
-    host.style.borderRadius = '18px';
     box.prepend(host);
   }
-
-  host.innerHTML = '';
+  host.replaceChildren();
   return host;
 }
 
 export async function openScanner(onCode) {
   const modal = document.querySelector('#scannerModal');
   if (!modal) return toast('ไม่พบหน้าต่างสแกน');
-
-  // รองรับ CSS ทั้งแบบ .modal.show และ .modal.open
+  if (scanning || scanner) await closeScanner();
   modal.classList.add('show', 'open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
 
   try {
     await loadLibrary();
     ensureReaderHost();
-
-    const H = window.Html5QrcodeSupportedFormats;
-
+    const formats = window.Html5QrcodeSupportedFormats;
     scanner = new window.Html5Qrcode('html5QrReader', {
-      formatsToSupport: [
-        H.QR_CODE,
-        H.EAN_13,
-        H.EAN_8,
-        H.UPC_A,
-        H.UPC_E,
-        H.CODE_128,
-        H.CODE_39,
-        H.CODE_93,
-        H.ITF,
-        H.CODABAR
-      ],
+      formatsToSupport: formats ? [formats.QR_CODE, formats.EAN_13, formats.EAN_8, formats.UPC_A, formats.UPC_E, formats.CODE_128, formats.CODE_39, formats.CODE_93, formats.ITF, formats.CODABAR] : undefined,
       useBarCodeDetectorIfSupported: true,
       verbose: false
     });
-
     scanning = true;
-
     await scanner.start(
       { facingMode: 'environment' },
-      {
-        fps: 20,
-        qrbox: (w, h) => ({
-          width: Math.floor(w * 0.92),
-          height: Math.min(Math.floor(h * 0.36), Math.floor(w * 0.45))
-        }),
-        aspectRatio: 4 / 3,
-        disableFlip: true
-      },
-      async (decodedText) => {
+      { fps: 15, qrbox: (width, height) => ({ width: Math.floor(width * .9), height: Math.min(Math.floor(height * .34), Math.floor(width * .42)) }), aspectRatio: 4 / 3, disableFlip: true },
+      async decodedText => {
         const code = String(decodedText || '').trim();
         if (!code || !scanning) return;
-
         scanning = false;
-
-        try {
-          navigator.vibrate?.(80);
-        } catch (_) {}
-
-        try {
-          await onCode?.(code);
-        } catch (err) {
-          console.error('Scanner callback error:', err);
-        }
-
+        try { navigator.vibrate?.(80); } catch {}
         await closeScanner();
-        toast('สแกนสำเร็จ: ' + code);
+        try { await onCode?.(code); } catch (error) { console.error('Scanner callback error:', error); }
+        toast(`สแกนสำเร็จ: ${code}`);
       },
       () => {}
     );
-  } catch (err) {
-    console.error('Scanner error:', err);
+  } catch (error) {
+    console.error('Scanner error:', error);
     await closeScanner();
-    toast('เปิดกล้องไม่ได้ กรุณาอนุญาต Camera ให้เบราว์เซอร์');
+    if (error?.name === 'NotAllowedError') toast('กรุณาอนุญาต Camera ให้เบราว์เซอร์');
+    else if (error?.name === 'NotFoundError') toast('ไม่พบกล้องบนอุปกรณ์');
+    else toast(error?.message || 'เปิดกล้องไม่ได้');
   }
 }
 
 export async function closeScanner() {
   scanning = false;
-
   if (scanner) {
     try {
       const state = scanner.getState?.();
       if (state === 2 || state === 3) await scanner.stop();
-    } catch (_) {}
-
-    try {
-      scanner.clear();
-    } catch (_) {}
-
+    } catch {}
+    try { scanner.clear(); } catch {}
     scanner = null;
   }
-
-  const host = document.querySelector('#html5QrReader');
-  if (host) host.innerHTML = '';
-
+  document.querySelector('#html5QrReader')?.replaceChildren();
   document.querySelector('#scannerVideo')?.classList.remove('hidden');
-  document.querySelector('#scannerModal')?.classList.remove('show', 'open');
+  const modal = document.querySelector('#scannerModal');
+  modal?.classList.remove('show', 'open');
+  modal?.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
 }
+
+window.addEventListener('pagehide', closeScanner);
+document.addEventListener('visibilitychange', () => { if (document.hidden && scanning) closeScanner(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && scanner) closeScanner(); });
+document.querySelector('#scannerModal')?.addEventListener('click', event => {
+  if (event.target.id === 'scannerModal') closeScanner();
+});

@@ -1,314 +1,41 @@
 <!doctype html>
 <html lang="th">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <meta name="theme-color" content="#08a957">
-    <title>เพิ่ม/แก้ไขสินค้า | ร้านของฉัน</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .barcode-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-        .scan-btn{white-space:nowrap;padding:0 14px;height:44px}
-        .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-        .scanner-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:none;flex-direction:column}
-        .scanner-modal.open{display:flex}
-        .scanner-head{display:flex;align-items:center;justify-content:space-between;color:#fff;padding:14px 16px;font-weight:700}
-        .scanner-close{border:0;background:#fff;color:#111;border-radius:999px;width:38px;height:38px;font-size:22px;cursor:pointer}
-        .scanner-body{position:relative;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
-        #scannerVideo{width:100%;height:100%;object-fit:cover}
-        .scanner-frame{position:absolute;width:min(82vw,420px);height:190px;border:3px solid #20df76;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.22);pointer-events:none}
-        .scanner-line{position:absolute;left:8%;right:8%;top:50%;height:2px;background:#20df76;box-shadow:0 0 10px #20df76}
-        .scanner-help{color:#fff;text-align:center;padding:12px 20px 20px;font-size:14px}
-        @media(max-width:420px){.barcode-row{grid-template-columns:1fr}.scan-btn{width:100%}}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#AA432D">
+  <title>เพิ่ม/แก้ไขสินค้า | Jimmy SuperMarket</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="app">
-        <header class="topbar">
-            <a class="icon-btn" href="products.html" style="display:grid;place-items:center">‹</a>
-            <h1 id="title">เพิ่มสินค้า</h1><span></span>
-        </header>
-        <main class="page">
-            <form id="form" class="card" style="padding:16px">
-                <div class="field">
-                    <label>รูปสินค้า <span class="muted">(สูงสุด 3 รูป)</span></label>
-                    <div id="photoGrid" class="photo-grid"></div>
-                    <label id="photoButton" class="btn btn-secondary btn-block" style="display:block;text-align:center">📷 ถ่ายรูป / เลือกรูป
-                        <input id="photoInput" type="file" accept="image/*" capture="environment" multiple hidden>
-                    </label>
-                    <div class="muted" style="text-align:center;margin-top:7px">เลือกได้สูงสุด 3 รูป และสามารถลบ/เปลี่ยนรูปได้</div>
-                </div>
-
-                <div class="field"><label>ไอคอนสินค้า</label><input id="icon" value="📦" maxlength="4"></div>
-                <div class="field"><label>ชื่อสินค้า</label><input id="name" required></div>
-
-                <div class="field">
-                    <label>บาร์โค้ด</label>
-                    <div class="barcode-row">
-                        <input id="barcode" inputmode="text" autocomplete="off" required placeholder="กรอกหรือสแกนบาร์โค้ด">
-                        <button id="scanBarcodeButton" class="btn btn-secondary scan-btn" type="button">📷 สแกน</button>
-                    </div>
-                </div>
-
-                <div class="field"><label>หมวดหมู่</label><input id="category"></div>
-                <div class="two-col">
-                    <div class="field"><label>ราคาขาย</label><input id="price" type="number" step="0.01" min="0" required></div>
-                    <div class="field"><label>ราคาทุน</label><input id="cost" type="number" step="0.01" min="0"></div>
-                </div>
-                <div class="two-col">
-                    <div class="field"><label>สต๊อกปัจจุบัน</label><input id="stock" type="number" min="0" value="0"></div>
-                    <div class="field"><label>แจ้งเตือนเมื่อเหลือ</label><input id="min" type="number" min="0" value="5"></div>
-                </div>
-                <button id="saveButton" type="submit" class="btn btn-primary btn-block">บันทึก</button>
-            </form>
-        </main>
-        <div id="nav"></div>
-    </div>
-
-    <div id="scannerModal" class="scanner-modal" aria-hidden="true">
-        <div class="scanner-head"><span>สแกนบาร์โค้ดสินค้า</span><button id="closeScanner" class="scanner-close" type="button" aria-label="ปิด">×</button></div>
-        <div class="scanner-body">
-            <video id="scannerVideo" autoplay muted playsinline></video>
-            <div class="scanner-frame"><div class="scanner-line"></div></div>
+  <div class="app">
+    <header class="topbar"><a class="icon-btn" href="products.html" aria-label="กลับหน้าสินค้า">‹</a><h1 id="title">เพิ่มสินค้า</h1><span></span></header>
+    <main class="page">
+      <form id="form" class="card form-card">
+        <div class="field">
+          <label>รูปสินค้า <span class="muted">(สูงสุด 3 รูป)</span></label>
+          <div id="photoGrid" class="photo-grid"></div>
+          <label id="photoButton" class="btn btn-secondary btn-block">📷 ถ่ายรูป / เลือกรูป<input id="photoInput" type="file" accept="image/*" capture="environment" multiple hidden></label>
+          <div class="muted photo-help">เลือกได้สูงสุด 3 รูป แต่ละรูปไม่เกิน 6 MB</div>
         </div>
-        <div class="scanner-help">วางบาร์โค้ดให้อยู่กลางกรอบ แล้วถือกล้องให้นิ่ง</div>
-    </div>
-
-    <div class="toast" aria-live="polite"></div>
-
-    <script src="https://unpkg.com/@zxing/browser@latest"></script>
-    <script type="module">
-        import { supabase, toast, bottomNav } from './js/config.js';
-        import { requireAuth } from './js/auth.js';
-
-        await requireAuth();
-        document.querySelector('#nav').innerHTML = bottomNav('stock');
-
-        const $ = id => document.getElementById(id);
-        const form=$('form'), titleEl=$('title'), iconEl=$('icon'), nameEl=$('name'), barcodeEl=$('barcode'), categoryEl=$('category'), priceEl=$('price'), costEl=$('cost'), stockEl=$('stock'), minEl=$('min'), photoInput=$('photoInput'), photoGrid=$('photoGrid'), photoButton=$('photoButton'), saveButton=$('saveButton'), scanButton=$('scanBarcodeButton'), scannerModal=$('scannerModal'), scannerVideo=$('scannerVideo'), closeScannerButton=$('closeScanner');
-
-        const params=new URLSearchParams(location.search), id=params.get('id');
-        let product=null, currentImages=[], selectedPhotos=[];
-        let scannerStream=null, scannerRunning=false, detector=null, scanTimer=null;
-
-        function renderPhotos(){
-            photoGrid.innerHTML='';
-            const items=[
-                ...currentImages.map((url,index)=>({type:'existing',url,index})),
-                ...selectedPhotos.map((file,index)=>({type:'new',url:URL.createObjectURL(file),index}))
-            ];
-            if(!items.length){
-                photoGrid.innerHTML='<div style="grid-column:1/-1;height:140px;border:1px dashed #d7dde5;border-radius:18px;display:grid;place-items:center;background:#f7fafc;font-size:42px">📦</div>';
-            }
-            items.forEach(item=>{
-                const box=document.createElement('div');
-                box.style.cssText='position:relative;aspect-ratio:1/1;border:1px solid #e6eaf0;border-radius:14px;overflow:hidden;background:#f7fafc';
-                const img=document.createElement('img'); img.src=item.url; img.alt='รูปสินค้า'; img.style.cssText='width:100%;height:100%;object-fit:cover';
-                const remove=document.createElement('button'); remove.type='button'; remove.textContent='×'; remove.style.cssText='position:absolute;top:5px;right:5px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(0,0,0,.65);color:white;font-size:20px;line-height:1;cursor:pointer';
-                remove.addEventListener('click',()=>{ if(item.type==='existing') currentImages.splice(item.index,1); else selectedPhotos.splice(item.index,1); renderPhotos(); });
-                box.append(img,remove); photoGrid.appendChild(box);
-            });
-            photoButton.style.display=(currentImages.length+selectedPhotos.length)>=3?'none':'block';
-        }
-
-        function fillForm(d){
-            product=d; titleEl.textContent='แก้ไขสินค้า'; iconEl.value=d.icon||'📦'; nameEl.value=d.name??''; barcodeEl.value=d.barcode??''; categoryEl.value=d.category??''; priceEl.value=d.price??0; costEl.value=d.cost??0; stockEl.value=d.stock??0; minEl.value=d.min_stock??5;
-            currentImages=Array.isArray(d.image_urls)&&d.image_urls.length?d.image_urls.slice(0,3):(d.image_url?[d.image_url]:[]);
-            renderPhotos();
-        }
-
-        async function loadProduct(){
-            if(!id){ barcodeEl.value=params.get('barcode')||''; renderPhotos(); return; }
-            saveButton.disabled=true; saveButton.textContent='กำลังโหลด...';
-            const {data,error}=await supabase.from('products').select('id,barcode,name,category,icon,image_url,image_urls,cost,price,stock,min_stock,active').eq('id',id).maybeSingle();
-            saveButton.disabled=false; saveButton.textContent='บันทึก';
-            if(error)return toast('โหลดสินค้าไม่สำเร็จ: '+error.message);
-            if(!data)return toast('ไม่พบข้อมูลสินค้า');
-            fillForm(data);
-        }
-
-        async function makeBarcodeDetector(){
-            if(!('BarcodeDetector' in window)) return null;
-            const supported=await BarcodeDetector.getSupportedFormats();
-            const wanted=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','code_93','codabar','itf','qr_code','data_matrix','pdf417'].filter(x=>supported.includes(x));
-            return new BarcodeDetector(wanted.length?{formats:wanted}:undefined);
-        }
-
-        async function readBarcodeFromFile(file){
-            // 1) Native BarcodeDetector: เร็วบน Chrome/Android ที่รองรับ
-            try{
-                const fileDetector=await makeBarcodeDetector();
-                if(fileDetector){
-                    let source=null;
-                    try{
-                        source=await createImageBitmap(file);
-                        const codes=await fileDetector.detect(source);
-                        if(codes.length) return String(codes[0].rawValue||'').trim() || null;
-                    } finally {
-                        if(source && typeof source.close==='function') source.close();
-                    }
-                }
-            }catch(err){ console.warn('Native image barcode:',err); }
-
-            // 2) ZXing fallback: ใช้กับ iPhone/iPad/Safari และ browser ที่ไม่มี BarcodeDetector
-            try{
-                if(!window.ZXingBrowser) return null;
-                const reader=new ZXingBrowser.BrowserMultiFormatReader();
-                const url=URL.createObjectURL(file);
-                try{
-                    const img=document.createElement('img');
-                    img.src=url;
-                    await new Promise((resolve,reject)=>{ img.onload=resolve; img.onerror=reject; });
-                    const result=await reader.decodeFromImageElement(img);
-                    return result?.getText?.() || result?.text || null;
-                } finally {
-                    URL.revokeObjectURL(url);
-                }
-            }catch(err){
-                console.warn('ZXing image barcode:',err);
-                return null;
-            }
-        }
-
-        async function autoFillBarcodeFromFiles(files){
-            if(barcodeEl.value.trim()) return;
-            for(const file of files){
-                const value=await readBarcodeFromFile(file);
-                if(value){
-                    barcodeEl.value=value;
-                    barcodeEl.dispatchEvent(new Event('input',{bubbles:true}));
-                    toast('อ่านบาร์โค้ดจากรูปแล้ว: '+value);
-                    return;
-                }
-            }
-        }
-
-        photoInput.addEventListener('change',async e=>{
-            const files=Array.from(e.target.files||[]); if(!files.length)return;
-            const remaining=3-currentImages.length-selectedPhotos.length;
-            if(remaining<=0){toast('เลือกรูปได้สูงสุด 3 รูป');return;}
-
-            const accepted=[];
-            for(const file of files.slice(0,remaining)){
-                if(!file.type.startsWith('image/')){toast('กรุณาเลือกเฉพาะไฟล์รูปภาพ');continue;}
-                if(file.size>6*1024*1024){toast('แต่ละรูปต้องไม่เกิน 6 MB');continue;}
-                selectedPhotos.push(file);
-                accepted.push(file);
-            }
-
-            if(files.length>remaining)toast('เลือกรูปได้สูงสุด 3 รูป');
-            photoInput.value='';
-            renderPhotos();
-
-            // เมื่อแนบรูปสินค้าและช่องบาร์โค้ดยังว่าง ให้ลองอ่านบาร์โค้ดจากรูปทันที
-            // จะไล่อ่านรูปที่เพิ่งเลือกทีละรูป และกรอกค่าที่อ่านได้ให้อัตโนมัติ
-            if(accepted.length && !barcodeEl.value.trim()){
-                await autoFillBarcodeFromFiles(accepted);
-            }
-        });
-
-        async function uploadPhotos(){
-            const uploadedUrls=[];
-            for(const file of selectedPhotos){
-                const ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').toLowerCase()||'jpg';
-                const path=`products/${crypto.randomUUID()}.${ext}`;
-                const {error}=await supabase.storage.from('product-images').upload(path,file,{contentType:file.type,upsert:false});
-                if(error)throw error;
-                uploadedUrls.push(supabase.storage.from('product-images').getPublicUrl(path).data.publicUrl);
-            }
-            return [...currentImages,...uploadedUrls].slice(0,3);
-        }
-
-        async function startScanner(){
-            try{
-                scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
-                scannerVideo.srcObject=scannerStream;
-                await scannerVideo.play();
-                scannerModal.classList.add('open'); scannerModal.setAttribute('aria-hidden','false');
-                scannerRunning=true;
-
-                // Native first
-                detector=await makeBarcodeDetector();
-                if(detector){
-                    scanLoop();
-                    return;
-                }
-
-                // ZXing fallback for iPhone/Safari and other mobile browsers
-                if(!window.ZXingBrowser) throw Error('ไม่พบตัวอ่านบาร์โค้ด');
-                const reader=new ZXingBrowser.BrowserMultiFormatReader();
-                const controls=await reader.decodeFromVideoElement(scannerVideo,(result,error,ctrl)=>{
-                    if(result){
-                        const value=String(result.getText?.() || result.text || '').trim();
-                        if(value){
-                            barcodeEl.value=value;
-                            barcodeEl.dispatchEvent(new Event('input',{bubbles:true}));
-                            if(ctrl?.stop) ctrl.stop();
-                            stopScanner();
-                            toast('อ่านบาร์โค้ดแล้ว: '+value);
-                            barcodeEl.focus();
-                        }
-                    }
-                });
-                window.__barcodeScannerControls=controls;
-            }catch(err){
-                stopScanner();
-                if(err?.name==='NotAllowedError') toast('ไม่ได้รับอนุญาตให้ใช้กล้อง กรุณาอนุญาต Camera ในเบราว์เซอร์');
-                else if(err?.name==='NotFoundError') toast('ไม่พบกล้องบนอุปกรณ์');
-                else toast('เปิดเครื่องสแกนไม่สำเร็จ: '+(err?.message||'Unknown error'));
-            }
-        }
-
-        async function scanLoop(){
-            if(!scannerRunning||!detector)return;
-            try{
-                if(scannerVideo.readyState>=2){
-                    const codes=await detector.detect(scannerVideo);
-                    if(codes.length){
-                        const value=String(codes[0].rawValue||'').trim();
-                        if(value){
-                            barcodeEl.value=value;
-                            stopScanner();
-                            barcodeEl.dispatchEvent(new Event('input',{bubbles:true}));
-                            toast('อ่านบาร์โค้ดแล้ว: '+value);
-                            barcodeEl.focus();
-                            return;
-                        }
-                    }
-                }
-            }catch(err){ console.warn('Barcode scan:',err); }
-            scanTimer=setTimeout(scanLoop,180);
-        }
-
-        function stopScanner(){
-            scannerRunning=false;
-            if(window.__barcodeScannerControls){ try{ window.__barcodeScannerControls.stop(); }catch(e){} window.__barcodeScannerControls=null; }
-            if(scanTimer){ clearTimeout(scanTimer); scanTimer=null; }
-            if(scannerStream){ scannerStream.getTracks().forEach(track=>track.stop()); scannerStream=null; }
-            scannerVideo.srcObject=null;
-            scannerModal.classList.remove('open'); scannerModal.setAttribute('aria-hidden','true');
-        }
-
-        scanButton.addEventListener('click',startScanner);
-        closeScannerButton.addEventListener('click',stopScanner);
-        document.addEventListener('visibilitychange',()=>{ if(document.hidden&&scannerRunning)stopScanner(); });
-        window.addEventListener('pagehide',stopScanner);
-
-        form.addEventListener('submit',async e=>{
-            e.preventDefault(); saveButton.disabled=true; saveButton.textContent='กำลังบันทึก...';
-            try{
-                const image_urls=await uploadPhotos();
-                const payload={icon:String(iconEl.value||'📦'),image_urls,image_url:image_urls[0]||null,name:String(nameEl.value||'').trim(),barcode:String(barcodeEl.value||'').trim(),category:String(categoryEl.value||'').trim(),price:Number(priceEl.value||0),cost:Number(costEl.value||0),stock:Number(stockEl.value||0),min_stock:Number(minEl.value||0),active:true};
-                if(!payload.name)throw Error('กรุณากรอกชื่อสินค้า');
-                if(!payload.barcode)throw Error('กรุณากรอกบาร์โค้ด');
-                const result=product?.id?await supabase.from('products').update(payload).eq('id',product.id).select().single():await supabase.from('products').insert(payload).select().single();
-                if(result.error)throw result.error;
-                toast(product?'แก้ไขสินค้าสำเร็จ':'เพิ่มสินค้าสำเร็จ');
-                setTimeout(()=>location.href='products.html',700);
-            }catch(err){ toast(err?.message||'บันทึกไม่สำเร็จ'); saveButton.disabled=false; saveButton.textContent='บันทึก'; }
-        });
-
-        await loadProduct();
-    </script>
+        <div class="field"><label for="icon">ไอคอนสินค้า</label><input id="icon" value="📦" maxlength="4"></div>
+        <div class="field"><label for="name">ชื่อสินค้า</label><input id="name" required></div>
+        <div class="field"><label for="barcode">บาร์โค้ด</label><div class="barcode-row"><input id="barcode" autocomplete="off" required placeholder="กรอกหรือสแกนบาร์โค้ด"><button id="scanBarcodeButton" class="btn btn-secondary scan-btn" type="button">▥ สแกน</button></div></div>
+        <div class="field"><label for="category">หมวดหมู่</label><input id="category"></div>
+        <div class="two-col"><div class="field"><label for="price">ราคาขาย</label><input id="price" type="number" step="0.01" min="0" required></div><div class="field"><label for="cost">ราคาทุน</label><input id="cost" type="number" step="0.01" min="0"></div></div>
+        <div class="two-col"><div class="field"><label for="stock">สต๊อกปัจจุบัน</label><input id="stock" type="number" min="0" value="0"></div><div class="field"><label for="min">แจ้งเตือนเมื่อเหลือ</label><input id="min" type="number" min="0" value="5"></div></div>
+        <button id="saveButton" type="submit" class="btn btn-primary btn-block">บันทึก</button>
+      </form>
+    </main>
+    <div id="nav"></div>
+  </div>
+  <div id="scannerModal" class="scanner-modal" aria-hidden="true">
+    <div class="scanner-head"><span>สแกนบาร์โค้ดสินค้า</span><button id="closeScanner" class="scanner-close" type="button" aria-label="ปิด">×</button></div>
+    <div class="scanner-body"><video id="scannerVideo" autoplay muted playsinline></video><div class="scanner-frame"><div class="scanner-line"></div></div></div>
+    <div class="scanner-help">วางบาร์โค้ดให้อยู่กลางกรอบ แล้วถือกล้องให้นิ่ง</div>
+  </div>
+  <div class="toast" aria-live="polite"></div>
+  <script src="https://unpkg.com/@zxing/browser@latest"></script>
+  <script type="module" src="js/product-form.js"></script>
 </body>
 </html>

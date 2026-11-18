@@ -1,1 +1,30 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#08a957"><title>รับสินค้าเข้าสต๊อก | ร้านของฉัน</title><link rel="stylesheet" href="css/style.css"></head><body><div class="app"><header class="topbar"><a class="icon-btn" href="products.html" style="display:grid;place-items:center">‹</a><h1>รับสินค้าเข้าสต๊อก</h1><span></span></header><main class="page"><button id="scanBtn" class="scan-hero"><span class="big">▥</span><strong>สแกนรับสินค้าเข้า</strong><small>แตะเพื่อเปิดกล้อง</small></button><form id="codeForm" class="search"><span>⌕</span><input id="code" placeholder="หรือกรอกบาร์โค้ด แล้วกด Enter"></form><div id="selected"></div><form id="stockForm" class="card" style="padding:16px;margin-top:14px" hidden><div class="field"><label>จำนวนรับเข้า</label><input id="qty" type="number" min="1" value="1" required></div><div class="field"><label>ราคาทุนต่อชิ้น</label><input id="cost" type="number" min="0" step="0.01"></div><div class="field"><label>หมายเหตุ</label><textarea id="note" placeholder="เช่น รับจากร้านส่ง"></textarea></div><button class="btn btn-primary btn-block">เพิ่มสต๊อก</button></form></main><div id="scannerModal" class="modal"><div class="sheet"><div class="section-title"><h2>สแกนบาร์โค้ด</h2><button id="closeScanner" class="icon-btn">×</button></div><div class="scanner-box"><video id="scannerVideo" playsinline></video><div class="scan-frame"></div></div><p class="muted" style="text-align:center">วางบาร์โค้ดให้อยู่ในกรอบ</p></div></div><div id="nav"></div></div><div class="toast" aria-live="polite"></div><script type="module" src="js/stock-in.js"></script></body></html>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#AA432D">
+  <title>รับสินค้าเข้าสต๊อก | Jimmy SuperMarket</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar"><a class="icon-btn" href="products.html" aria-label="กลับหน้าสินค้า">‹</a><h1>รับสินค้าเข้าสต๊อก</h1><span></span></header>
+    <main class="page">
+      <button id="scanBtn" class="scan-hero" type="button"><span class="big" aria-hidden="true">▥</span><strong>สแกนรับสินค้าเข้า</strong><small>แตะเพื่อเปิดกล้อง</small></button>
+      <form id="codeForm" class="search"><span aria-hidden="true">⌕</span><input id="code" placeholder="หรือกรอกบาร์โค้ด แล้วกด Enter" autocomplete="off" required aria-label="กรอกบาร์โค้ด"></form>
+      <div id="selected" aria-live="polite"></div>
+      <form id="stockForm" class="card form-card" hidden>
+        <div class="field"><label for="qty">จำนวนรับเข้า</label><input id="qty" type="number" min="1" value="1" required></div>
+        <div class="field"><label for="cost">ราคาทุนต่อชิ้น</label><input id="cost" type="number" min="0" step="0.01"></div>
+        <div class="field"><label for="note">หมายเหตุ</label><textarea id="note" placeholder="เช่น รับจากร้านส่ง"></textarea></div>
+        <button class="btn btn-primary btn-block" type="submit">เพิ่มสต๊อก</button>
+      </form>
+    </main>
+    <div id="scannerModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="stockScannerTitle"><div class="sheet"><div class="section-title"><h2 id="stockScannerTitle">สแกนบาร์โค้ด</h2><button id="closeScanner" class="icon-btn" type="button" aria-label="ปิดเครื่องสแกน">×</button></div><div class="scanner-box"><video id="scannerVideo" playsinline></video><div class="scan-frame"></div></div><p class="muted" style="text-align:center">วางบาร์โค้ดให้อยู่ในกรอบ</p></div></div>
+    <div id="nav"></div>
+  </div>
+  <div class="toast" aria-live="polite"></div>
+  <script type="module" src="js/stock-in.js"></script>
+</body>
+</html>

@@ -1,103 +1,134 @@
-import { supabase, money, bottomNav, toast } from './config.js';
+import { supabase, money, renderBottomNav, toast, escapeHtml, safeImageUrl } from './config.js';
 import { requireAuth } from './auth.js';
 import { openScanner, closeScanner } from './scanner.js';
 
 await requireAuth();
-const $ = s => document.querySelector(s);
-let products = [], cart = [], settings = null;
-$('#nav').innerHTML = bottomNav('pos');
+renderBottomNav('pos');
+const $ = selector => document.querySelector(selector);
+let products = [];
+let cart = [];
+let settings = null;
 
 const totalAmount = () => cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
 
 async function load() {
-  const [a, b] = await Promise.all([
+  $('#productGrid').innerHTML = '<div class="empty">กำลังโหลดสินค้า...</div>';
+  const [productResult, settingResult] = await Promise.all([
     supabase.from('products').select('*').eq('active', true).order('name'),
     supabase.from('app_settings').select('*').eq('id', 1).maybeSingle()
   ]);
-  if (a.error) return toast(a.error.message);
-  products = a.data || [];
-  settings = b.data || null;
+  if (productResult.error) {
+    $('#productGrid').innerHTML = '<div class="empty">โหลดสินค้าไม่สำเร็จ</div>';
+    return toast(productResult.error.message);
+  }
+  if (settingResult.error) toast(settingResult.error.message);
+  products = productResult.data || [];
+  settings = settingResult.data || null;
   renderProducts();
   renderCart();
 }
 
-function pic(p, h = 76) {
-  return p.image_url
-    ? `<img src="${p.image_url}" alt="${p.name}" style="width:100%;height:${h}px;object-fit:contain;border-radius:12px">`
-    : `<div class="emoji-img" style="display:grid;place-items:center;font-size:38px">${p.icon || '📦'}</div>`;
+function productVisual(product, className = '') {
+  const image = safeImageUrl(product.image_url);
+  return image
+    ? `<img class="${className}" src="${escapeHtml(image)}" alt="${escapeHtml(product.name)}">`
+    : `<span class="${className || 'emoji-img'}" aria-hidden="true">${escapeHtml(product.icon || '📦')}</span>`;
 }
 
-function renderProducts(q = '') {
-  q = q.toLowerCase();
-  $('#productGrid').innerHTML = products
-    .filter(p => p.stock > 0 && ((p.name || '').toLowerCase().includes(q) || String(p.barcode || '').includes(q)))
-    .map(p => `<button class="product-card" data-id="${p.id}">${pic(p)}<b>${p.name}</b><small>${money(p.price)}</small></button>`)
-    .join('') || '<div class="empty">ไม่พบสินค้า</div>';
-  document.querySelectorAll('#productGrid button').forEach(b => b.onclick = () => add(b.dataset.id));
+function renderProducts(query = '') {
+  const normalized = query.toLocaleLowerCase('th');
+  const filtered = products.filter(product =>
+    Number(product.stock) > 0
+    && (String(product.name || '').toLocaleLowerCase('th').includes(normalized)
+      || String(product.barcode || '').includes(normalized))
+  );
+  $('#productGrid').innerHTML = filtered.map(product => `
+    <button class="product-card" type="button" data-id="${escapeHtml(product.id)}">
+      ${productVisual(product)}<b>${escapeHtml(product.name)}</b><small>${money(product.price)}</small>
+    </button>`).join('') || '<div class="empty">ไม่พบสินค้า</div>';
+  $('#productGrid').querySelectorAll('[data-id]').forEach(button => {
+    button.addEventListener('click', () => add(button.dataset.id));
+  });
 }
 
 function add(id) {
-  const p = products.find(x => x.id === id);
-  const r = cart.find(x => x.id === id);
-  if (!p || p.stock < 1) return toast('สินค้าหมด');
-  if (r) {
-    if (r.qty >= p.stock) return toast('จำนวนเกินสต๊อก');
-    r.qty++;
+  const product = products.find(item => item.id === id);
+  const row = cart.find(item => item.id === id);
+  if (!product || Number(product.stock) < 1) return toast('สินค้าหมด');
+  if (row) {
+    if (row.qty >= Number(product.stock)) return toast('จำนวนเกินสต๊อก');
+    row.qty += 1;
   } else {
-    cart.push({ ...p, qty: 1 });
+    cart.push({ ...product, qty: 1 });
   }
   renderCart();
 }
 
 function renderCart() {
-  $('#cartList').innerHTML = cart.map(x => `<div class="list-row">${x.image_url ? `<img class="thumb" src="${x.image_url}" alt="${x.name}">` : `<div class="thumb" style="display:grid;place-items:center;font-size:28px">${x.icon || '📦'}</div>`}<div class="grow"><b>${x.name}</b><span class="muted">${money(x.price)} / ชิ้น</span><div class="qty"><button data-a="-" data-id="${x.id}">−</button><b>${x.qty}</b><button data-a="+" data-id="${x.id}">+</button></div></div><b>${money(x.price * x.qty)}</b></div>`).join('') || '<div class="empty card">ยังไม่มีสินค้าในตะกร้า</div>';
-  $('#pieceCount').textContent = cart.reduce((s, x) => s + x.qty, 0);
+  $('#cartList').innerHTML = cart.map(item => `
+    <div class="list-row">
+      ${productVisual(item, 'thumb')}
+      <div class="grow"><b>${escapeHtml(item.name)}</b><span class="muted">${money(item.price)} / ชิ้น</span>
+        <div class="qty"><button type="button" data-action="minus" data-id="${escapeHtml(item.id)}" aria-label="ลดจำนวน">−</button><b>${item.qty}</b><button type="button" data-action="plus" data-id="${escapeHtml(item.id)}" aria-label="เพิ่มจำนวน">+</button></div>
+      </div>
+      <b>${money(Number(item.price) * item.qty)}</b>
+    </div>`).join('') || '<div class="empty">ยังไม่มีสินค้าในตะกร้า</div>';
+
+  $('#pieceCount').textContent = String(cart.reduce((sum, item) => sum + item.qty, 0));
   $('#total').textContent = money(totalAmount());
-  document.querySelectorAll('#cartList button').forEach(b => b.onclick = () => {
-    const r = cart.find(x => x.id === b.dataset.id);
-    const p = products.find(x => x.id === r.id);
-    r.qty += b.dataset.a === '+' ? 1 : -1;
-    if (r.qty > p.stock) r.qty = p.stock;
-    if (r.qty <= 0) cart = cart.filter(x => x.id !== r.id);
-    renderCart();
+  $('#cartList').querySelectorAll('button[data-id]').forEach(button => {
+    button.addEventListener('click', () => changeQuantity(button.dataset.id, button.dataset.action));
   });
 }
 
-$('#search').oninput = e => renderProducts(e.target.value.trim());
-$('#manualForm').onsubmit = e => {
-  e.preventDefault();
-  const p = products.find(x => String(x.barcode) === String($('#manualCode').value).trim());
-  p ? add(p.id) : toast('ไม่พบบาร์โค้ดนี้');
-};
-$('#scanBtn').onclick = () => openScanner(code => {
-  const p = products.find(x => String(x.barcode) === String(code).trim());
-  p ? add(p.id) : toast('ไม่พบสินค้า');
+function changeQuantity(id, action) {
+  const row = cart.find(item => item.id === id);
+  const product = products.find(item => item.id === id);
+  if (!row || !product) return;
+  row.qty += action === 'plus' ? 1 : -1;
+  if (row.qty > Number(product.stock)) {
+    row.qty = Number(product.stock);
+    toast('จำนวนเกินสต๊อก');
+  }
+  if (row.qty <= 0) cart = cart.filter(item => item.id !== id);
+  renderCart();
+}
+
+$('#search').addEventListener('input', event => renderProducts(event.target.value.trim()));
+$('#manualForm').addEventListener('submit', event => {
+  event.preventDefault();
+  const input = $('#manualCode');
+  const product = products.find(item => String(item.barcode) === input.value.trim());
+  if (product) {
+    add(product.id);
+    input.value = '';
+  } else {
+    toast('ไม่พบบาร์โค้ดนี้');
+  }
 });
-$('#closeScanner').onclick = closeScanner;
+$('#scanBtn').addEventListener('click', () => openScanner(code => {
+  const product = products.find(item => String(item.barcode) === String(code).trim());
+  product ? add(product.id) : toast('ไม่พบสินค้า');
+}));
+$('#closeScanner').addEventListener('click', closeScanner);
 
 function renderCashOptions() {
   const total = totalAmount();
-  const standardCash = [10, 20, 50, 100, 500, 1000];
-  const options = [...new Set([total, ...standardCash.filter(amount => amount > total)])]
-    .filter(amount => amount > 0)
-    .sort((a, b) => a - b);
-
-  $('#cashShortcuts').innerHTML = options.map(amount => `
-    <button type="button" class="btn btn-secondary cash-option" data-cash="${amount}">
-      ${amount === total ? `${money(amount)} พอดี` : money(amount)}
-    </button>`).join('');
-
-  document.querySelectorAll('#cashShortcuts [data-cash]').forEach(button => {
-    button.onclick = () => {
+  const standard = [10, 20, 50, 100, 500, 1000];
+  const options = [...new Set([total, ...standard.filter(amount => amount > total)])]
+    .filter(amount => amount > 0).sort((a, b) => a - b);
+  $('#cashShortcuts').innerHTML = options.map(amount => `<button type="button" class="btn btn-secondary cash-option" data-cash="${amount}">${amount === total ? `${money(amount)} พอดี` : money(amount)}</button>`).join('');
+  $('#cashShortcuts').querySelectorAll('[data-cash]').forEach(button => {
+    button.addEventListener('click', () => {
       $('#received').value = button.dataset.cash;
-      document.querySelectorAll('.cash-option').forEach(x => x.classList.remove('active'));
+      $('#cashShortcuts').querySelectorAll('.cash-option').forEach(option => option.classList.remove('active'));
       button.classList.add('active');
-      update();
-    };
+      updatePayment();
+    });
   });
 }
 
-function update() {
+function updatePayment() {
   const total = totalAmount();
   const received = Number($('#received').value || 0);
   $('#payTotal').textContent = money(total);
@@ -106,75 +137,76 @@ function update() {
 }
 
 function paymentView() {
-  const qr = $('input[name=pay]:checked').value === 'transfer';
-  $('#cashPanel').hidden = qr;
-  $('#qrPanel').hidden = !qr;
-  $('#confirmPay').textContent = qr ? 'ยืนยันว่ารับเงินแล้ว' : 'ยืนยันการชำระเงิน';
-
-  if (!qr) {
-    const total = totalAmount();
-    $('#received').value = total;
+  const transfer = $('input[name="pay"]:checked').value === 'transfer';
+  $('#cashPanel').hidden = transfer;
+  $('#qrPanel').hidden = !transfer;
+  $('#confirmPay').textContent = transfer ? 'ยืนยันว่ารับเงินแล้ว' : 'ยืนยันการชำระเงิน';
+  if (!transfer) {
+    $('#received').value = totalAmount();
     renderCashOptions();
   } else {
-    if (settings?.payment_qr_url) {
-      const i = new Image();
-      i.src = settings.payment_qr_url;
-      i.alt = 'QR รับเงิน';
-      i.style.cssText = 'width:100%;height:100%;object-fit:contain';
-      $('#paymentQr').replaceChildren(i);
+    const qrUrl = safeImageUrl(settings?.payment_qr_url);
+    if (qrUrl) {
+      const image = new Image();
+      image.src = qrUrl;
+      image.alt = 'QR รับเงิน';
+      $('#paymentQr').replaceChildren(image);
     } else {
       $('#paymentQr').textContent = 'ยังไม่ได้ตั้งค่า QR';
     }
     $('#qrAccount').textContent = settings?.payment_account_name || '';
     $('#qrBank').textContent = settings?.payment_bank_name || '';
   }
-  update();
+  updatePayment();
 }
 
-$('#checkout').onclick = () => {
+function closePayment() {
+  $('#paymentModal').classList.remove('show');
+  document.body.classList.remove('modal-open');
+}
+
+$('#checkout').addEventListener('click', () => {
   if (!cart.length) return toast('กรุณาเพิ่มสินค้า');
   $('#paymentModal').classList.add('show');
   document.body.classList.add('modal-open');
   paymentView();
-};
+});
+$('#closePayment').addEventListener('click', closePayment);
+$('#received').addEventListener('input', () => {
+  $('#cashShortcuts').querySelectorAll('.cash-option').forEach(option => option.classList.remove('active'));
+  updatePayment();
+});
+document.querySelectorAll('input[name="pay"]').forEach(radio => radio.addEventListener('change', paymentView));
 
-$('#closePayment').onclick = () => {
-  $('#paymentModal').classList.remove('show');
-  document.body.classList.remove('modal-open');
-};
-
-$('#received').oninput = () => {
-  document.querySelectorAll('.cash-option').forEach(x => x.classList.remove('active'));
-  update();
-};
-
-document.querySelectorAll('input[name=pay]').forEach(r => r.onchange = paymentView);
-
-$('#confirmPay').onclick = async () => {
-  const method = $('input[name=pay]:checked').value;
+$('#confirmPay').addEventListener('click', async () => {
+  const method = $('input[name="pay"]:checked').value;
   const total = totalAmount();
   const received = Number($('#received').value || 0);
+  if (method === 'cash' && received < total) return toast(`รับเงินไม่พอ ขาด ${money(total - received)}`);
+  if (method === 'transfer' && !safeImageUrl(settings?.payment_qr_url)) return toast('กรุณาตั้งค่า QR รับเงินก่อน');
 
-  if (method === 'cash' && received < total) {
-    return toast(`รับเงินไม่พอ ขาด ${money(total - received)}`);
-  }
-  if (method === 'transfer' && !settings?.payment_qr_url) {
-    return toast('กรุณาตั้งค่า QR รับเงินก่อน');
-  }
-
-  const btn = $('#confirmPay');
-  btn.disabled = true;
+  const button = $('#confirmPay');
+  button.disabled = true;
   const { data, error } = await supabase.rpc('sale_checkout', {
-    p_items: cart.map(x => ({ product_id: x.id, quantity: x.qty })),
+    p_items: cart.map(item => ({ product_id: item.id, quantity: item.qty })),
     p_payment_method: method,
     p_received: method === 'cash' ? received : total
   });
-  btn.disabled = false;
-  if (error) return toast(error.message);
-
+  if (error) {
+    button.disabled = false;
+    return toast(error.message);
+  }
   cart = [];
-  toast(`ชำระสำเร็จ ${data.sale_no}`);
-  setTimeout(() => location.href = 'sales.html', 700);
-};
+  toast(`ชำระสำเร็จ ${data?.sale_no || ''}`);
+  setTimeout(() => location.href = 'sales.html', 750);
+});
+
+$('#paymentModal').addEventListener('click', event => { if (event.target.id === 'paymentModal') closePayment(); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    closePayment();
+    closeScanner();
+  }
+});
 
 await load();

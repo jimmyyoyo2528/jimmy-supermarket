@@ -1,1 +1,35 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#08a957"><title>ตั้งค่า | ร้านของฉัน</title><link rel="stylesheet" href="css/style.css"></head><body><div class="app"><header class="topbar"><span></span><h1>ตั้งค่า</h1><span></span></header><main class="page"><section class="card"><div class="setting-row"><div class="avatar">●</div><div><b>Jimmy Shop</b><div class="muted" id="userEmail"></div></div></div><a class="setting-row" href="product-form.html"><span>▣</span><div class="grow">เพิ่มสินค้า</div><span>›</span></a><a class="setting-row" href="stock-in.html"><span>▦</span><div class="grow">รับสินค้าเข้าสต๊อก</div><span>›</span></a><a class="setting-row" href="sales.html"><span>🧾</span><div class="grow">ประวัติการขาย</div><span>›</span></a></section><section class="card" style="padding:16px;margin-top:16px"><h2 style="margin:0 0 14px;font-size:18px">QR รับเงิน</h2><div id="qrPreview" style="width:220px;height:220px;margin:0 auto 14px;border:1px solid var(--line);border-radius:18px;display:grid;place-items:center;overflow:hidden;background:#f7fafc;color:var(--muted);text-align:center;padding:12px">ยังไม่มี QR รับเงิน</div><label class="btn btn-secondary btn-block" style="display:block;text-align:center">เลือกรูป QR<input id="qrInput" type="file" accept="image/*" hidden></label><div class="field" style="margin-top:14px"><label>ชื่อบัญชี/ชื่อร้าน</label><input id="accountName" placeholder="เช่น Jimmy Shop"></div><div class="field"><label>ธนาคาร/PromptPay</label><input id="bankName" placeholder="เช่น PromptPay หรือ K PLUS"></div><button id="saveQr" class="btn btn-primary btn-block">บันทึก QR</button></section><button id="logout" class="btn btn-danger btn-block" style="margin-top:18px">ออกจากระบบ</button></main><div id="nav"></div></div><div class="toast" aria-live="polite"></div><script type="module" src="js/settings.js"></script></body></html>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#AA432D">
+  <title>ตั้งค่า | Jimmy SuperMarket</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar"><span></span><h1>ตั้งค่า</h1><span></span></header>
+    <main class="page settings-stack">
+      <section class="card settings-card">
+        <div class="setting-row"><div class="avatar" aria-hidden="true">J</div><div><b>Jimmy SuperMarket</b><div class="muted" id="userEmail"></div></div></div>
+        <a class="setting-row" href="product-form.html"><span aria-hidden="true">＋</span><div class="grow">เพิ่มสินค้า</div><span>›</span></a>
+        <a class="setting-row" href="stock-in.html"><span aria-hidden="true">▦</span><div class="grow">รับสินค้าเข้าสต๊อก</div><span>›</span></a>
+        <a class="setting-row" href="sales.html"><span aria-hidden="true">▤</span><div class="grow">ประวัติการขาย</div><span>›</span></a>
+      </section>
+      <section class="card settings-panel">
+        <h2>QR รับเงิน</h2>
+        <div id="qrPreview" class="qr-preview">ยังไม่มี QR รับเงิน</div>
+        <label class="btn btn-secondary btn-block">เลือกรูป QR<input id="qrInput" type="file" accept="image/*" hidden></label>
+        <div class="field" style="margin-top:14px"><label for="accountName">ชื่อบัญชี/ชื่อร้าน</label><input id="accountName" placeholder="เช่น Jimmy SuperMarket"></div>
+        <div class="field"><label for="bankName">ธนาคาร/PromptPay</label><input id="bankName" placeholder="เช่น PromptPay หรือ K PLUS"></div>
+        <button id="saveQr" class="btn btn-primary btn-block" type="button">บันทึก QR</button>
+      </section>
+      <button id="logout" class="btn btn-danger btn-block" type="button">ออกจากระบบ</button>
+    </main>
+    <div id="nav"></div>
+  </div>
+  <div class="toast" aria-live="polite"></div>
+  <script type="module" src="js/settings.js"></script>
+</body>
+</html>
